@@ -1,0 +1,61 @@
+{
+  "name": "party-fun-box",
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": ".",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/next:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/party-fun-box"
+      },
+      "configurations": {
+        "development": {
+          "outputPath": "."
+        },
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/next:server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "party-fun-box:build",
+        "dev": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "party-fun-box:build:development",
+          "dev": true
+        },
+        "production": {
+          "buildTarget": "party-fun-box:build:production",
+          "dev": false
+        }
+      }
+    },
+    "export": {
+      "executor": "@nx/next:export",
+      "options": {
+        "buildTarget": "party-fun-box:build:production"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectName}"],
+      "options": {
+        "jestConfig": "jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["./src/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  },
+  "tags": []
+}
