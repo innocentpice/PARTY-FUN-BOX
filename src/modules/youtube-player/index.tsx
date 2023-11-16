@@ -1,17 +1,16 @@
 'use client';
 
 import React from "react";
+import { YoutubePlayerControlAtom } from "./control"
+import { useAtomValue, useSetAtom } from "jotai";
 
 export default function YoutubePlayer() {
-
     const playerElmRef = React.useRef<HTMLDivElement>(null);
-    const playerRef = React.useRef<YT.Player>(null);
-
-    React.useImperativeHandle(playerRef, () => {
-        return new YT.Player(playerElmRef.current as HTMLDivElement, {
+    const setYoutubePlayerControlAtom = useSetAtom(YoutubePlayerControlAtom);
+    React.useEffect(() => {
+        const youtubePlayer = new YT.Player(playerElmRef.current as HTMLDivElement, {
             width: "100%",
             height: "100%",
-            videoId: "PCc06UVcflA",
             playerVars: {
                 autoplay: 1,
                 playsinline: 1,
@@ -25,21 +24,25 @@ export default function YoutubePlayer() {
                 onStateChange: (...param) => console.log(`onStateChange`, param),
             }
         });
-    })
+        setYoutubePlayerControlAtom(youtubePlayer);
 
-    React.useEffect(() => {
-        playerRef.current?.playVideo?.();
+    }, [setYoutubePlayerControlAtom]);
 
-        setTimeout(() => {
-            playerRef.current?.loadVideoById?.("1wq47tabJh0");
+    return <div id="yt-player" className="aspect-video" ref={playerElmRef} />
+}
 
-        }, 5000);
-    });
+export function YoutubePlayerControl() {
+
+    const youtubePlayerControl = useAtomValue(YoutubePlayerControlAtom);
+
+    if (!youtubePlayerControl) return null
 
     return <>
-        <div id="yt-player" className="aspect-video" ref={playerElmRef}></div>
-        <button onClick={() => playerRef.current?.playVideo?.()}>Play</button>
-        <br />
-        <button onClick={() => playerRef.current?.pauseVideo?.()}>Pause</button>
+        <button onClick={() => {
+            youtubePlayerControl.loadVideoById("1wq47tabJh0");
+            youtubePlayerControl.playVideo();
+        }}>PLAY</button> | <button onClick={() => {
+            youtubePlayerControl.pauseVideo();
+        }}>PAUSE</button>
     </>
 }
