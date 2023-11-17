@@ -1,8 +1,8 @@
 'use client';
 
 import React from "react";
-import { YoutubePlayerControlAtom } from "./control"
-import { useAtomValue, useSetAtom } from "jotai";
+import { YoutubePlayerControlAtom } from "./youtube.player.control"
+import { useSetAtom } from "jotai";
 
 export default function YoutubePlayer() {
     const playerElmRef = React.useRef<HTMLDivElement>(null);
@@ -31,18 +31,3 @@ export default function YoutubePlayer() {
     return <div id="yt-player" className="aspect-video" ref={playerElmRef} />
 }
 
-export function YoutubePlayerControl() {
-
-    const youtubePlayerControl = useAtomValue(YoutubePlayerControlAtom);
-
-    if (!youtubePlayerControl) return null
-
-    return <>
-        <button onClick={() => {
-            youtubePlayerControl.loadVideoById("1wq47tabJh0");
-            youtubePlayerControl.playVideo();
-        }}>PLAY</button> | <button onClick={() => {
-            youtubePlayerControl.pauseVideo();
-        }}>PAUSE</button>
-    </>
-}
