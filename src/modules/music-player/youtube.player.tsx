@@ -32,6 +32,11 @@ export default function YoutubePlayer() {
                 },
             }
         });
+
+        return () => {
+            youtubePlayer.destroy?.();
+            setYoutubePlayerControlAtom(undefined);
+        }
     }, [setYoutubePlayerControlAtom]);
 
     return <div id="yt-player" className="aspect-video" ref={playerElmRef} />

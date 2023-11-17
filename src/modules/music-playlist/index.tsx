@@ -1,7 +1,11 @@
-import Image from "next/image";
+"use client"
 
-export default function MusicPlaylist() {
-    return <div className="bg-black text-gray-300 p-10 rounded-3xl border-red-100 border">
+import Image from "next/image";
+import React from "react";
+import MusicSearch from "../music-search";
+
+export function MusicPlaylist() {
+    return <>
         <div className="flex">
             <Image className="mr-6" src="https://placekitten.com/g/200/200" height="200" width="200" alt="" />
             <div className="flex flex-col justify-center">
@@ -13,18 +17,7 @@ export default function MusicPlaylist() {
                 <p className="text-gray-600 text-sm">Created by <a>Spotify</a> - 50 songs, 3 hr 2 min</p>
             </div>
         </div>
-        <div className="mt-6 flex justify-between">
-            <div className="flex">
-                <button className="mr-2 bg-green-500 text-green-100 block py-2 px-8 rounded-full">Play</button>
-                <button className="mr-2 border border-white block p-2 rounded-full">
-                    <Image src="https://image.flaticon.com/icons/svg/2485/2485986.svg" height="25" width="25" alt="" /></button>
-                <button className="mr-2 border border-white block p-2 rounded-full">...</button>
-            </div>
-            <div className="text-gray-600 text-sm tracking-widest text-right">
-                <h5 className="mb-1">Followers</h5>
-                <p>5,055</p>
-            </div>
-        </div>
+
         <div className="mt-10">
             <div className="flex text-gray-600">
                 <div className="p-2 w-8 flex-shrink-0"></div>
@@ -32,7 +25,7 @@ export default function MusicPlaylist() {
                 <div className="p-2 w-full">Title</div>
                 <div className="p-2 w-full">Artist</div>
                 <div className="p-2 w-full">Album</div>
-                <div className="p-2 w-12 flex-shrink-0 text-right">⏱</div>
+                <div className="p-2 w-12 flex-shrink-0 text-right">#</div>
             </div>
             <div className="flex border-b border-gray-800 hover:bg-gray-800">
                 <div className="p-3 w-8 flex-shrink-0">▶️</div>
@@ -75,5 +68,24 @@ export default function MusicPlaylist() {
                 <div className="p-3 w-12 flex-shrink-0 text-right">5:35</div>
             </div>
         </div>
+    </>
+}
+
+
+export default function MusicPlaylistWarpper() {
+    const [viewMode, setViewMode] = React.useState<"PLAYLIST" | "SEARCH">("SEARCH");
+
+    return <div className="bg-black text-gray-300 p-10 rounded-3xl border-red-100 border">
+        <div className="flex mb-10 border-b-2 pb-2">
+            <button onClick={() => {
+                setViewMode(prev => prev === "PLAYLIST" ? "SEARCH" : "PLAYLIST")
+            }}>TOGGLE SEARCH</button>
+        </div>
+        {
+            viewMode === "PLAYLIST" ?
+                <MusicPlaylist />
+                :
+                <MusicSearch />
+        }
     </div>
 }
