@@ -31,6 +31,12 @@
       "env": {
         "jest": true
       }
+    },
+    {
+      "files": ["*.machine.typegen.ts"],
+      "rules": {
+        "@typescript-eslint/ban-types": "off"
+      }
     }
   ],
   "extends": ["plugin:@nx/react-typescript", "next", "next/core-web-vitals"]
