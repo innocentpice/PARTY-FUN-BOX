@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export default function MusicPlaylist() {
-    return <div className="bg-black text-gray-300 min-h-screen p-10">
+    return <div className="bg-black text-gray-300 p-10 rounded-3xl border-red-100 border">
         <div className="flex">
             <Image className="mr-6" src="https://placekitten.com/g/200/200" height="200" width="200" alt="" />
             <div className="flex flex-col justify-center">

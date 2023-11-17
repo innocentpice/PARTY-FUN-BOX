@@ -4,8 +4,8 @@ import MusicControl from "src/modules/music-control";
 import MusicPlayer from "src/modules/music-player";
 
 export default function IndexPage() {
-    return <div className="min-h-screen min-w-full bg-slate-300">
-        <div className="flex flex-row gap-2 w-full">
+    return <div className="min-h-screen min-w-full bg-black">
+        <div className="flex flex-row gap-10 w-full p-12">
             <div className="flex flex-col w-2/3">
                 <MusicPlayer />
             </div>
