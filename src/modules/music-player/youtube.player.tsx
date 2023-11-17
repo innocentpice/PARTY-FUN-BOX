@@ -2,9 +2,7 @@
 
 import React from "react";
 import { YoutubePlayerControlAtom } from "./youtube.player.control"
-import { useAtomValue, useSetAtom } from "jotai";
-import { SteamPlayerAtom } from '../../app/context/control';
-import { SoundControl } from '../../app/context/context.type';
+import { useSetAtom } from "jotai";
 
 export default function YoutubePlayer() {
     const playerElmRef = React.useRef<HTMLDivElement>(null);
@@ -45,24 +43,4 @@ export default function YoutubePlayer() {
     }, [setYoutubePlayerControlAtom]);
 
     return <div id="yt-player" className="aspect-video" ref={playerElmRef} />
-}
-
-export function YoutubePlayerControl() {
-    const setSteamPlay = useSetAtom(SteamPlayerAtom) 
-    const youtubePlayerControl = useAtomValue(YoutubePlayerControlAtom);
-    
-    if (!youtubePlayerControl) return null
-
-    return <div className="flex flex-row gap-2">
-        <button className="w-[200px] bg-lime-600 text-white py-[8px] rounded-lg" onClick={() => {
-            const steam: SoundControl = { currentPlay: '1wq47tabJh0' }
-            setSteamPlay(steam)
-            youtubePlayerControl.loadVideoById("1wq47tabJh0");
-            youtubePlayerControl.playVideo();
-        }}>PLAY</button> 
-
-        <button className="w-[200px] bg-rose-600 text-white py-[8px] rounded-lg" onClick={() => {
-            youtubePlayerControl.pauseVideo();
-        }}>PAUSE</button>
-    </div>
 }
