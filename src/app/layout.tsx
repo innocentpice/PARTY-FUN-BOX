@@ -1,5 +1,7 @@
-import './global.css';
 import React from 'react';
+import Providers from './provider';
+
+import './global.css';
 
 export const metadata = {
   title: 'Welcome to party-fun-box',
@@ -17,7 +19,9 @@ export default function RootLayout({
         <script src="https://www.youtube.com/iframe_api" defer />
       </head>
       <body>
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

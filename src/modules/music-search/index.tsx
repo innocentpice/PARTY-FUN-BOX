@@ -1,8 +1,19 @@
-import YTSearch from "youtube-sr"
+'use client'
+
+import React from "react";
+import { getPlayList } from "./actions";
+import { Video } from "youtube-sr";
 
 export default function MusicSearch() {
 
-    const test = YTSearch.searchOne("mood lofi");
+    const [searchResult, setSearchResult] = React.useState<Video[]>([]);
 
-    return <div>{JSON.stringify(test, null, 2)}</div>
+    React.useEffect(() => {
+        getPlayList().then(videos => setSearchResult(JSON.parse(videos)));
+    }, []);
+
+
+    return <div>
+        {JSON.stringify(searchResult, null, 2)}
+    </div>
 }
