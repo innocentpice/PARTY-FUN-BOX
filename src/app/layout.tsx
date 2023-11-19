@@ -52,7 +52,7 @@ export default function RootLayout({
                   </Link>
                 </div>
                 {/* MEDIA PLAYLIST */}
-                <div className="flex flex-col gap-3 bg-slate-600/20 h-full rounded-xl p-3">
+                <div className="flex flex-col gap-3 bg-slate-600/20 h-full rounded-xl p-3 pb-20">
                   <div className="flex p-2">
                     <div className="flex w-full @md:w-1/5 justify-center">
                       <ListMusicIcon />
