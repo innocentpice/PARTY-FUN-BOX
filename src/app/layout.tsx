@@ -19,71 +19,75 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <script src="https://www.youtube.com/iframe_api" defer />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </head>
-      <body>
+      <body className='bg-black h-full @container text-gray-400 relative'>
         <Providers>
-          <div className="bg-black h-screen @container text-gray-400">
-            <div className="flex flex-col h-full">
-              {/* MAIN LAYOUT */}
-              <div className="flex flex-row gap-2 p-2 h-full">
-                <div className="flex flex-col w-1/3 gap-2">
-                  {/* MAIN MENU */}
-                  <div className="flex flex-col gap-3 bg-slate-600/20 h-fit rounded-xl py-3 px-5">
-                    <Link href="/">
-                      <div className="flex flex-row w-full hover:text-white py-2 content-center cursor-pointer">
-                        <div className="flex w-1/5">
-                          <HomeIcon />
-                        </div>
-                        <div className="flex">
-                          หน้าหลัก
-                        </div>
+
+          <div className="flex flex-col h-full">
+            {/* MAIN LAYOUT */}
+            <div className="flex flex-row gap-2 p-2 h-full pb-20">
+              <div className="flex flex-col w-1/3 gap-2">
+                {/* MAIN MENU */}
+                <div className="flex flex-col gap-3 bg-slate-600/20 h-fit rounded-xl py-3 px-5">
+                  <Link href="/">
+                    <div className="flex flex-row w-full hover:text-white py-2 content-center cursor-pointer">
+                      <div className="flex w-full @md:w-1/5 justify-center">
+                        <HomeIcon />
                       </div>
-                    </Link>
-                    <Link href="/music-search">
-                      <div className="flex flex-row w-full hover:text-white py-2 content-center cursor-pointer">
-                        <div className="flex w-1/5">
-                          <SearchIcon />
-                        </div>
-                        <div className="flex">
-                          ค้นหา
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
-                  {/* MEDIA PLAYLIST */}
-                  <div className="flex flex-col gap-3 bg-slate-600/20 h-full rounded-xl p-3">
-                    <div className="flex gap-3 p-2">
-                      <div className="flex"><ListMusicIcon /></div>
-                      <div className="flex">คิวเพลง</div>
-                    </div>
-                    <hr />
-                    <div className="flex flex-col">
-                      <div className="flex gap-2 hover:bg-slate-700/10 rounded-md p-2 cursor-pointer">
-                        <div className="flex w-1/5">
-                          <div className="aspect-w-1 aspect-h-1 bg-white w-full rounded-md"></div>
-                        </div>
-                        <div className="flex">
-                          HELLO
-                        </div>
+                      <div className="hidden @md:flex">
+                        หน้าหลัก
                       </div>
                     </div>
-                  </div>
+                  </Link>
+                  <Link href="/music-search">
+                    <div className="flex flex-row w-full hover:text-white py-2 content-center cursor-pointer">
+                      <div className="flex w-full @md:w-1/5 justify-center">
+                        <SearchIcon />
+                      </div>
+                      <div className="hidden @md:flex">
+                        ค้นหา
+                      </div>
+                    </div>
+                  </Link>
                 </div>
-                <div className="flex w-full">
-                  <div className="flex flex-col gap-3 bg-slate-600/20 h-full w-full rounded-xl py-3 px-5">
-                    {children}
+                {/* MEDIA PLAYLIST */}
+                <div className="flex flex-col gap-3 bg-slate-600/20 h-full rounded-xl p-3">
+                  <div className="flex p-2">
+                    <div className="flex w-full @md:w-1/5 justify-center">
+                      <ListMusicIcon />
+                    </div>
+                    <div className="hidden @md:flex">
+                      คิวเพลง
+                    </div>
+                  </div>
+                  <hr />
+                  <div className="flex flex-col">
+                    <div className="flex gap-2 hover:bg-slate-700/10 rounded-md p-2 cursor-pointer">
+                      <div className="flex w-full @md:w-1/5">
+                        <div className="aspect-w-1 aspect-h-1 bg-white w-full rounded-md"></div>
+                      </div>
+                      <div className="hidden @md:flex">
+                        HELLO
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+              <div className="flex w-full">
+                <div className="flex flex-col gap-3 bg-slate-600/20 h-full w-full rounded-xl py-3 px-5">
+                  {children}
+                </div>
+              </div>
+            </div>
 
-              {/* MUSIC CONTROL */}
-              <div className="flex h-20">
-                <div className="flex w-full h-full justify-center">
-                  <div className="flex gap-2 items-center">
-                    <ArrowLeftCircleIcon />
-                    <PlayCircleIcon fill='white' className='w-8 h-8' />
-                    <ArrowRightCircleIcon />
-                  </div>
+            {/* MUSIC CONTROL */}
+            <div className="flex h-20 w-full fixed bottom-0">
+              <div className="flex w-full h-full justify-center">
+                <div className="flex gap-2 items-center">
+                  <ArrowLeftCircleIcon />
+                  <PlayCircleIcon fill='white' className='w-8 h-8' />
+                  <ArrowRightCircleIcon />
                 </div>
               </div>
             </div>
