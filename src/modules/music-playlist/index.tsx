@@ -75,17 +75,19 @@ export function MusicPlaylist() {
 export default function MusicPlaylistWarpper() {
     const [viewMode, setViewMode] = React.useState<"PLAYLIST" | "SEARCH">("SEARCH");
 
-    return <div className="bg-black text-gray-300 p-10 rounded-3xl border-red-100 border">
+    return <div className="flex flex-col bg-black text-gray-300 p-10 rounded-3xl border-red-100 border h-full">
         <div className="flex mb-10 border-b-2 pb-2">
             <button onClick={() => {
                 setViewMode(prev => prev === "PLAYLIST" ? "SEARCH" : "PLAYLIST")
             }}>TOGGLE SEARCH</button>
         </div>
-        {
-            viewMode === "PLAYLIST" ?
-                <MusicPlaylist />
-                :
-                <MusicSearch />
-        }
+        <div className="flex h-full">
+            {
+                viewMode === "PLAYLIST" ?
+                    <MusicPlaylist />
+                    :
+                    <MusicSearch />
+            }
+        </div>
     </div>
 }

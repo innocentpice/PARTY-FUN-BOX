@@ -9,7 +9,7 @@ export default function YoutubePlayer() {
     const setYoutubePlayerControlAtom = useSetAtom(YoutubePlayerControlAtom);
 
     React.useEffect(() => {
-        
+
         const youtubePlayer = new YT.Player(playerElmRef.current as HTMLDivElement, {
             width: "100%",
             height: "100%",
@@ -42,5 +42,5 @@ export default function YoutubePlayer() {
 
     }, [setYoutubePlayerControlAtom]);
 
-    return <div id="yt-player" className="aspect-video" ref={playerElmRef} />
+    return <div id="yt-player" ref={playerElmRef} />
 }
