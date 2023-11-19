@@ -49,7 +49,7 @@ export default function RootLayout({
                   <div className="flex flex-col gap-3 bg-slate-600/20 h-full rounded-xl p-3">
                     <div className="flex gap-3 p-2">
                       <div className="flex"><ListMusicIcon /></div>
-                      <div className="flex">MUSIC PLAYLIST</div>
+                      <div className="flex">คิวเพลง</div>
                     </div>
                     <hr />
                     <div className="flex flex-col">
@@ -64,7 +64,11 @@ export default function RootLayout({
                     </div>
                   </div>
                 </div>
-                <div className="flex"></div>
+                <div className="flex w-full">
+                  <div className="flex flex-col gap-3 bg-slate-600/20 h-full w-full rounded-xl py-3 px-5">
+                    {children}
+                  </div>
+                </div>
               </div>
 
               {/* MUSIC CONTROL */}

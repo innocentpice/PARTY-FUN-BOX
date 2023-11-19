@@ -42,5 +42,7 @@ export default function YoutubePlayer() {
 
     }, [setYoutubePlayerControlAtom]);
 
-    return <div id="yt-player" ref={playerElmRef} />
+    return <div className="flex aspect-w-16 aspect-h-9">
+        <div id="yt-player" className="rounded-2xl" ref={playerElmRef} />
+    </div>
 }
