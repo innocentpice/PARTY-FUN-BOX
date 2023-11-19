@@ -2,6 +2,9 @@ import React from 'react';
 import Providers from './provider';
 
 import './global.css';
+import BackgroundMusicColor from 'src/modules/background-color-music';
+import LogoPartyBox from 'src/components/logo';
+import MusicControl from 'src/modules/music-control';
 
 export const metadata = {
   title: 'Welcome to party-fun-box',
@@ -20,7 +23,15 @@ export default function RootLayout({
       </head>
       <body>
         <Providers>
-          {children}
+          <BackgroundMusicColor>
+            <div className="min-h-screen min-w-full">
+              <div className="p-[8px] h-[52px] flex gap-[24px] bg-[#121212] px-[12px] justify-between">
+                <LogoPartyBox width="80" />
+              </div>
+              {children}
+              <MusicControl />
+            </div>
+          </BackgroundMusicColor>
         </Providers>
       </body>
     </html>

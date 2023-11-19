@@ -32,7 +32,7 @@ export default function YoutubePlayer() {
                         setYoutubePlayerControlAtom(youtubePlayer);
                     }
                 },
-            }
+            },
         });
 
         return () => {
