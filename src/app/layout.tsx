@@ -1,10 +1,8 @@
 import React from 'react';
 import Providers from './provider';
+import { HomeIcon, SearchIcon, ListMusicIcon, PlayCircleIcon, ArrowLeftCircleIcon, ArrowRightCircleIcon } from "lucide-react"
 
 import './global.css';
-import BackgroundMusicColor from 'src/modules/background-color-music';
-import LogoPartyBox from 'src/components/logo';
-import MusicControl from 'src/modules/music-control';
 
 export const metadata = {
   title: 'Welcome to party-fun-box',
@@ -23,15 +21,64 @@ export default function RootLayout({
       </head>
       <body>
         <Providers>
-          <BackgroundMusicColor>
-            <div className="min-h-screen min-w-full">
-              <div className="p-[8px] h-[52px] flex gap-[24px] bg-[#121212] px-[12px] justify-between">
-                <LogoPartyBox width="80" />
+          <div className="bg-black h-screen @container text-gray-400">
+            <div className="flex flex-col h-full">
+              {/* MAIN LAYOUT */}
+              <div className="flex flex-row gap-2 p-2 h-full">
+                <div className="flex flex-col w-1/3 gap-2">
+                  {/* MAIN MENU */}
+                  <div className="flex flex-col gap-3 bg-slate-600/20 h-fit rounded-xl py-3 px-5">
+                    <div className="flex flex-row w-full hover:text-white py-2 content-center cursor-pointer">
+                      <div className="flex w-1/5">
+                        <HomeIcon />
+                      </div>
+                      <div className="flex">
+                        หน้าหลัก
+                      </div>
+                    </div>
+                    <div className="flex flex-row w-full hover:text-white py-2 content-center cursor-pointer">
+                      <div className="flex w-1/5">
+                        <SearchIcon />
+                      </div>
+                      <div className="flex">
+                        ค้นหา
+                      </div>
+                    </div>
+                  </div>
+                  {/* MEDIA PLAYLIST */}
+                  <div className="flex flex-col gap-3 bg-slate-600/20 h-full rounded-xl p-3">
+                    <div className="flex gap-3 p-2">
+                      <div className="flex"><ListMusicIcon /></div>
+                      <div className="flex">MUSIC PLAYLIST</div>
+                    </div>
+                    <hr />
+                    <div className="flex flex-col">
+                      <div className="flex gap-2 hover:bg-slate-700/10 rounded-md p-2 cursor-pointer">
+                        <div className="flex w-1/5">
+                          <div className="aspect-w-1 aspect-h-1 bg-white w-full rounded-md"></div>
+                        </div>
+                        <div className="flex">
+                          HELLO
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex"></div>
               </div>
-              {children}
-              <MusicControl />
+
+              {/* MUSIC CONTROL */}
+              <div className="flex h-20">
+                <div className="flex w-full h-full justify-center">
+                  <div className="flex gap-2 items-center">
+                    <ArrowLeftCircleIcon />
+                    <PlayCircleIcon fill='white' className='w-8 h-8' />
+                    <ArrowRightCircleIcon />
+                  </div>
+                </div>
+              </div>
             </div>
-          </BackgroundMusicColor>
+          </div>
         </Providers>
       </body>
     </html>
