@@ -3,6 +3,7 @@ import Providers from './provider';
 import { HomeIcon, SearchIcon, ListMusicIcon, PlayCircleIcon, ArrowLeftCircleIcon, ArrowRightCircleIcon } from "lucide-react"
 
 import './global.css';
+import Link from 'next/link';
 
 export const metadata = {
   title: 'Welcome to party-fun-box',
@@ -28,22 +29,26 @@ export default function RootLayout({
                 <div className="flex flex-col w-1/3 gap-2">
                   {/* MAIN MENU */}
                   <div className="flex flex-col gap-3 bg-slate-600/20 h-fit rounded-xl py-3 px-5">
-                    <div className="flex flex-row w-full hover:text-white py-2 content-center cursor-pointer">
-                      <div className="flex w-1/5">
-                        <HomeIcon />
+                    <Link href="/">
+                      <div className="flex flex-row w-full hover:text-white py-2 content-center cursor-pointer">
+                        <div className="flex w-1/5">
+                          <HomeIcon />
+                        </div>
+                        <div className="flex">
+                          หน้าหลัก
+                        </div>
                       </div>
-                      <div className="flex">
-                        หน้าหลัก
+                    </Link>
+                    <Link href="/music-search">
+                      <div className="flex flex-row w-full hover:text-white py-2 content-center cursor-pointer">
+                        <div className="flex w-1/5">
+                          <SearchIcon />
+                        </div>
+                        <div className="flex">
+                          ค้นหา
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex flex-row w-full hover:text-white py-2 content-center cursor-pointer">
-                      <div className="flex w-1/5">
-                        <SearchIcon />
-                      </div>
-                      <div className="flex">
-                        ค้นหา
-                      </div>
-                    </div>
+                    </Link>
                   </div>
                   {/* MEDIA PLAYLIST */}
                   <div className="flex flex-col gap-3 bg-slate-600/20 h-full rounded-xl p-3">
