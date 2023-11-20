@@ -38,15 +38,19 @@ export default function MusicControl() {
 
     }, [musicControlState.context.playingMedia, youtubePlayerControl, youtubePlayerPlayingMediaId]);
 
-    return <div className="flex gap-2 items-center">
-        <ArrowLeftCircleIcon />
-        <button
-            onClick={() => {
-                youtubePlayerControl?.playVideo?.();
-            }}
-        >
-            <PlayCircleIcon fill='white' className='w-8 h-8' />
-        </button>
-        <ArrowRightCircleIcon />
+    return <div className="flex w-full flex-row">
+        <div className="flex w-full justify-center items-center"></div>
+        <div className="flex w-2/4 gap-2 justify-center items-center">
+            <ArrowLeftCircleIcon />
+            <button
+                onClick={() => {
+                    youtubePlayerControl?.playVideo?.();
+                }}
+            >
+                <PlayCircleIcon fill='white' className='w-8 h-8' />
+            </button>
+            <ArrowRightCircleIcon />
+        </div>
+        <div className="flex w-full justify-center items-center"></div>
     </div>
 }

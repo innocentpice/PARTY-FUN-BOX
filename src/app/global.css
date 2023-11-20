@@ -5,6 +5,7 @@
 html,
 body,
 div#__next,
-main {
+main,
+:root {
   @apply h-[calc(100dvh)] w-[calc(100dvw)];
 }
