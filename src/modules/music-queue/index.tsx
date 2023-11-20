@@ -2,14 +2,12 @@
 
 import React from 'react';
 import { ListMusicIcon, YoutubeIcon } from "lucide-react";
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { musicQueueAtom } from './state';
 import Image from 'next/image';
-import { musicControlMachineAtom } from '../music-control/music-control.state';
 import { Video } from 'youtube-sr';
 
 export default function MusicQueue() {
-  const musicControlDispatch = useSetAtom(musicControlMachineAtom);
   const [musisQueue, setMusisQueue] = useAtom(musicQueueAtom);
 
   return <div className="flex flex-col gap-3 bg-slate-600/20 h-full rounded-xl p-3 pb-20">
