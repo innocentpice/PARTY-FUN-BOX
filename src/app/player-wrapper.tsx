@@ -10,7 +10,7 @@ export default function PlayerWrapper({ children }: React.PropsWithChildren) {
     const pathName = usePathname();
 
     return <>
-        <div className={cn("flex", pathName !== "/" && "hidden")}>
+        <div className={cn("flex w-full h-full", pathName !== "/" && "hidden")}>
             <MusicPlayer />
         </div>
         {pathName !== "/" && children}

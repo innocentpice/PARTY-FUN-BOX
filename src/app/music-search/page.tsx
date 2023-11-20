@@ -7,6 +7,7 @@ import { Video } from "youtube-sr";
 import { searchMedias } from "./actions";
 import { useSetAtom } from "jotai";
 import { musicControlMachineAtom } from "src/modules/music-control/music-control.state";
+import { musicQueueAtom } from "src/modules/music-queue/state";
 
 
 declare global {
@@ -17,7 +18,8 @@ declare global {
 
 export default function MusicSearchPage() {
 
-    const musicControlDispatch = useSetAtom(musicControlMachineAtom);
+
+    const setMusisQueue = useSetAtom(musicQueueAtom);
     const [searchResult, setSearchResult] = React.useState<Video[]>([]);
 
     return <div className="flex flex-col h-full gap-3">
@@ -51,13 +53,7 @@ export default function MusicSearchPage() {
                 <div className="flex text-xs items-center hover:underline hover:text-white cursor-pointer">
                     <button
                         onClick={() => {
-                            console.log(video);
-                            if (video.id) musicControlDispatch({
-                                type: "LOAD", "meida": {
-                                    player: "YOUTUBE",
-                                    videoId: video.id
-                                }
-                            })
+                            setMusisQueue(prev => [...prev, video]);
                         }}
                     >
                         <PlusCircleIcon className="p-1" /> Add Queue

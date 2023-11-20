@@ -1,14 +1,12 @@
 import React from 'react';
 import Providers from './provider';
-import { HomeIcon, SearchIcon, ListMusicIcon } from "lucide-react"
+import { HomeIcon, SearchIcon } from "lucide-react"
 import './global.css';
 import Link from 'next/link';
-import { usePathname } from "next/navigation"
 import { Metadata } from "next/types"
-import MusicPlayer from 'src/modules/music-player';
 import MusicControl from 'src/modules/music-control';
-import { cn } from 'src/utils/tw-merge';
 import PlayerWrapper from './player-wrapper';
+import MusicQueue from '../modules/music-queue';
 
 export const metadata: Metadata = {
   title: 'Welcome to party-fun-box',
@@ -26,9 +24,7 @@ export default function RootLayout({
       <body className='bg-black @container text-gray-400 relative'>
         <script src="https://www.youtube.com/iframe_api" defer />
         <Providers>
-
           <div className="flex flex-col h-full ">
-
             {/* MAIN LAYOUT */}
             <div className="flex flex-row gap-2 p-2 h-[calc(100dvh-theme(spacing.20))]">
               <div className="flex flex-col w-1/3 gap-2">
@@ -55,28 +51,7 @@ export default function RootLayout({
                     </div>
                   </Link>
                 </div>
-                {/* MEDIA PLAYLIST */}
-                <div className="flex flex-col gap-3 bg-slate-600/20 h-full rounded-xl p-3 pb-20">
-                  <div className="flex p-2">
-                    <div className="flex w-full @md:w-1/5 justify-center">
-                      <ListMusicIcon />
-                    </div>
-                    <div className="hidden @md:flex">
-                      คิวเพลง
-                    </div>
-                  </div>
-                  <hr />
-                  <div className="flex flex-col">
-                    <div className="flex gap-2 hover:bg-slate-700/10 rounded-md p-2 cursor-pointer">
-                      <div className="flex w-full @md:w-1/5">
-                        <div className="aspect-w-1 aspect-h-1 bg-white w-full rounded-md"></div>
-                      </div>
-                      <div className="hidden @md:flex">
-                        HELLO
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <MusicQueue />
               </div>
               <div className="flex w-full rounded-xl">
                 <div className="flex flex-col gap-3 bg-slate-600/20 h-full w-full rounded-xl py-3 px-5">
