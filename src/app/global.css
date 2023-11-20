@@ -6,5 +6,5 @@ html,
 body,
 div#__next,
 main {
-  @apply h-[calc(100dvh)];
+  @apply h-[calc(100dvh)] w-[calc(100dvw)];
 }

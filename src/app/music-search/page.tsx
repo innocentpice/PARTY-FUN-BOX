@@ -5,6 +5,8 @@ import Image from "next/image";
 import React from "react";
 import { Video } from "youtube-sr";
 import { searchMedias } from "./actions";
+import { useSetAtom } from "jotai";
+import { musicControlMachineAtom } from "src/modules/music-control/music-control.state";
 
 
 declare global {
@@ -15,15 +17,13 @@ declare global {
 
 export default function MusicSearchPage() {
 
+    const musicControlDispatch = useSetAtom(musicControlMachineAtom);
     const [searchResult, setSearchResult] = React.useState<Video[]>([]);
-
 
     return <div className="flex flex-col h-full gap-3">
         <div className="flex relative w-full content-center text-center items-center gap-4">
             <SearchIcon className="absolute ml-3 p-1" />
             <input type="text" placeholder="ค้นหาเพลง" className="bg-slate-600/20 rounded-full placeholder:text-gray-400/50 text-sm px-10 w-full" onChange={(event) => {
-                if (!event.target.value || event.target.value === "") return;
-
                 try {
                     clearTimeout(window.searchDebounce)
                 } catch (err) {
@@ -31,6 +31,7 @@ export default function MusicSearchPage() {
                 }
 
                 window.searchDebounce = setTimeout(() => {
+                    if (!event.target.value || event.target.value === "") return;
                     searchMedias(event.target.value).then(res => setSearchResult(JSON.parse(res)))
                 }, 500);
             }} />
@@ -48,7 +49,19 @@ export default function MusicSearchPage() {
                     </p>
                 </div>
                 <div className="flex text-xs items-center hover:underline hover:text-white cursor-pointer">
-                    <PlusCircleIcon className="p-1" /> Add Queue
+                    <button
+                        onClick={() => {
+                            console.log(video);
+                            if (video.id) musicControlDispatch({
+                                type: "LOAD", "meida": {
+                                    player: "YOUTUBE",
+                                    videoId: video.id
+                                }
+                            })
+                        }}
+                    >
+                        <PlusCircleIcon className="p-1" /> Add Queue
+                    </button>
                 </div>
             </div>)}
         </div>
