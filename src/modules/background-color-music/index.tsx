@@ -1,19 +1,20 @@
 'use client';
 
 import React from 'react';
-import { useAtomValue, useAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { format } from 'react-string-format';
-import { SteamPlayerAtom } from '../../app/context/control';
 import { Palette } from 'color-thief-react';
 import { musicControlMachineAtom } from "../music-control/music-control.state";
 
 export default function BackgroundMusicColor({
   children,
 }: React.PropsWithChildren) {
-  const steamControl = useAtomValue(SteamPlayerAtom);
-  const [musicControlState, musicControlDispatch] = useAtom(musicControlMachineAtom);
+  const [musicControlState] = useAtom(musicControlMachineAtom);
 
-  if (musicControlState?.context?.playingMedia?.player !== "YOUTUBE") return <div>{children}</div>;
+  if (musicControlState?.context?.playingMedia?.player !== "YOUTUBE") return (
+    <div className='h-full'>
+      {children}
+    </div>);
   
   const link = format(
     'https://img.youtube.com/vi/{0}/maxresdefault.jpg',
@@ -26,8 +27,10 @@ export default function BackgroundMusicColor({
       <Palette src={link} crossOrigin="anonymous" format="hex" colorCount={4}>
         {({ data }) => (
           <div
+            className='h-full rounded-xl'
             style={{
-              background: `linear-gradient(${data?.[0]}, ${data?.[1]})`,
+              // background: `linear-gradient(${data?.[1]}, ${data?.[0]})`,
+              background: `linear-gradient(${data?.join(", ")}, #0f1115cc 70%, #0f1115 90%)`,
               width: '100%',
               height: '100%',
             }}
