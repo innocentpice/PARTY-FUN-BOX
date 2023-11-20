@@ -26,7 +26,7 @@ export default function RootLayout({
 
           <div className="flex flex-col h-full">
             {/* MAIN LAYOUT */}
-            <div className="flex flex-row gap-2 p-2 h-full pb-20">
+            <div className="flex flex-row gap-2 p-2 h-full">
               <div className="flex flex-col w-1/3 gap-2">
                 {/* MAIN MENU */}
                 <div className="flex flex-col gap-3 bg-slate-600/20 h-fit rounded-xl py-3 px-5">
@@ -82,7 +82,7 @@ export default function RootLayout({
             </div>
 
             {/* MUSIC CONTROL */}
-            <div className="flex h-20 w-full fixed bottom-0">
+            <div className="flex h-20 w-full">
               <div className="flex w-full h-full justify-center">
                 <div className="flex gap-2 items-center">
                   <ArrowLeftCircleIcon />
