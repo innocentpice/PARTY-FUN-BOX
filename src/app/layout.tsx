@@ -7,6 +7,7 @@ import { Metadata } from "next/types"
 import MusicControl from 'src/modules/music-control';
 import PlayerWrapper from './player-wrapper';
 import MusicQueue from '../modules/music-queue';
+import AudioPlayer from 'src/modules/music-player/audio-player';
 
 export const metadata: Metadata = {
   title: 'Welcome to party-fun-box',
@@ -70,6 +71,7 @@ export default function RootLayout({
             <div className="flex h-[theme(spacing.20)] w-full">
               <div className="flex w-full h-full justify-center">
                 <MusicControl />
+                <AudioPlayer />
               </div>
             </div>
           </div>

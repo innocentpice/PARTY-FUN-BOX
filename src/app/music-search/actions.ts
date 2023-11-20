@@ -1,12 +1,17 @@
 'use server';
 
-import YoutubeSearch from 'youtube-sr';
+import YoutubeSearch, { Video } from 'youtube-sr';
 
-export async function searchMedias(searchQuery: string) {
-  return YoutubeSearch.search(searchQuery, {
+export type MediaItem = {
+  source: 'YOUTUBE';
+} & Video;
+
+export async function searchMedias(searchTerms: string) {
+  const searchResult = await YoutubeSearch.search(searchTerms, {
     type: 'video',
     safeSearch: true,
-  }).then((videos) => {
-    return JSON.stringify(videos);
   });
+  return JSON.stringify(
+    searchResult.map((item) => ({ ...item, source: 'YOUTUBE' }))
+  );
 }

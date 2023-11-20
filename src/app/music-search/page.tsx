@@ -3,8 +3,7 @@
 import { PlusCircleIcon, SearchIcon, YoutubeIcon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
-import { Video } from "youtube-sr";
-import { searchMedias } from "./actions";
+import { searchMedias, MediaItem } from "./actions";
 import { useSetAtom } from "jotai";
 import { musicQueueAtom } from "src/modules/music-queue/state";
 
@@ -17,9 +16,8 @@ declare global {
 
 export default function MusicSearchPage() {
 
-
     const setMusisQueue = useSetAtom(musicQueueAtom);
-    const [searchResult, setSearchResult] = React.useState<Video[]>([]);
+    const [searchResult, setSearchResult] = React.useState<MediaItem[]>([]);
 
     return <div className="flex flex-col h-full gap-3">
         <div className="flex relative w-full content-center text-center items-center gap-4">
@@ -42,7 +40,7 @@ export default function MusicSearchPage() {
             {searchResult.map((video) => <div key={video.id} className="flex flex-col w-1/2 @2xl:w-1/3 @5xl:w-1/4 gap-2 p-5 hover:bg-slate-700/50 rounded-lg">
                 <div className="flex w-full aspect-w-1 aspect-h-1 relative">
                     <Image src={video.thumbnail?.url as string} fill alt="" className="rounded-xl" />
-                    <YoutubeIcon className="absolute z-auto top-2 left-2 w-4 h-4" fill="red" color="white" />
+                    {video.source === "YOUTUBE" && <YoutubeIcon className="absolute z-auto top-2 left-2 w-4 h-4 opacity-80" fill="red" color="white" />}
                 </div>
                 <div className="flex flex-col gap-1 text-sm h-10">
                     <p className="line-clamp-2">

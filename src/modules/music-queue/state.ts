@@ -1,4 +1,4 @@
 import { atom } from 'jotai';
-import { Video } from 'youtube-sr';
+import { MediaItem } from 'src/app/music-search/actions';
 
-export const musicQueueAtom = atom<Video[]>([]);
+export const musicQueueAtom = atom<MediaItem[]>([]);

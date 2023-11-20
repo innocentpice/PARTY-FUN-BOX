@@ -9,13 +9,13 @@ import { musicQueueAtom } from "../music-queue/state";
 
 export default function MusicControl() {
     const [musicControlState, musicControlDispatch] = useAtom(musicControlMachineAtom);
-    const [musisQueue] = useAtom(musicQueueAtom);
+    const [musicQueue] = useAtom(musicQueueAtom);
     const youtubePlayerControl = useAtomValue(YoutubePlayerControlAtom);
 
     const youtubePlayerPlayingMediaId = youtubePlayerControl?.getVideoUrl?.();
 
     React.useEffect(() => {
-        const firstQueue = musisQueue[0]
+        const firstQueue = musicQueue[0]
 
 
         if (firstQueue?.id && (musicControlState.context.playingMedia?.player !== "YOUTUBE" || musicControlState.context.playingMedia?.videoId !== firstQueue.id)) {
@@ -26,7 +26,7 @@ export default function MusicControl() {
                 }
             })
         }
-    }, [musicControlDispatch, musicControlState, musisQueue])
+    }, [musicControlDispatch, musicControlState, musicQueue])
 
     React.useEffect(() => {
         // Sync Playing Media Youtube Player

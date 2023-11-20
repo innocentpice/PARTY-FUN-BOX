@@ -7,6 +7,14 @@ const { composePlugins, withNx } = require('@nx/next');
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
  **/
 const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/proxy/:url(.*)',
+        destination: 'https://:url',
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
@@ -19,6 +27,7 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  crossOrigin: 'anonymous',
 };
 
 const plugins = [
