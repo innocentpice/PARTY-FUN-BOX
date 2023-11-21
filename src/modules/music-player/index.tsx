@@ -18,5 +18,5 @@ export default function MusicPlayer() {
                     : new Promise(resolve => resolve(""))
             }
         />
-    </React.Suspense>, [fistTrack.id]);
+    </React.Suspense>, [fistTrack?.id]);
 }

@@ -36,6 +36,11 @@ export function YoutubePlayer({ trackStreamInfo }: { trackStreamInfo: Promise<st
         });
     }, []);
 
+    React.useEffect(() => {
+        if (!audioRef.current) return;
+        audioRef.current.media.play();
+    }, [streamAudioUrl]);
+
     return (
         <div className="flex flex-row">
             <MediaController ref={videoRef} >
