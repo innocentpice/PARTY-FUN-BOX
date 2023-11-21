@@ -7,11 +7,12 @@ const { composePlugins, withNx } = require('@nx/next');
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
  **/
 const nextConfig = {
-  async rewrites() {
+  async redirects() {
     return [
       {
         source: '/proxy/:url(.*)',
         destination: 'https://:url',
+        permanent: true,
       },
     ];
   },

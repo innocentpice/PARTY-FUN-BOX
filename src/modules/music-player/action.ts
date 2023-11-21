@@ -11,14 +11,20 @@ export async function getYoutubeStream(youtubeURL: string) {
   const trackInfo = await YoutubeDLCore.getInfo(youtubeURL);
 
   const formatInfo: YoutubeStreamInfo = {
-    video: YoutubeDLCore.chooseFormat(trackInfo.formats, {
-      quality: 'lowestvideo',
-      filter: 'videoonly',
-    }),
-    audio: YoutubeDLCore.chooseFormat(trackInfo.formats, {
-      quality: 'highestaudio',
-      filter: 'audioonly',
-    }),
+    video: YoutubeDLCore.chooseFormat(
+      trackInfo.formats.filter((item) => item.container === 'mp4'),
+      {
+        quality: 'lowestvideo',
+        filter: 'videoonly',
+      }
+    ),
+    audio: YoutubeDLCore.chooseFormat(
+      trackInfo.formats.filter((item) => item.container === 'mp4'),
+      {
+        quality: 'highestaudio',
+        filter: 'audioonly',
+      }
+    ),
   };
 
   return JSON.stringify(formatInfo);

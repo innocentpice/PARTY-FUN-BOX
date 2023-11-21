@@ -26,6 +26,7 @@ export function YoutubePlayer({ trackStreamInfo }: { trackStreamInfo: Promise<st
 
     const setMusicQueue = useSetAtom(musicQueueAtom);
 
+
     React.useEffect(() => {
 
         const videoMedia = videoRef.current?.media;
@@ -76,6 +77,7 @@ export function YoutubePlayer({ trackStreamInfo }: { trackStreamInfo: Promise<st
                     slot="media"
                     src={streamVideoUrl || ""}
                     preload="auto"
+                    playsInline
                     muted
                 />
             </MediaController>
