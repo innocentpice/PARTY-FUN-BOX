@@ -39,6 +39,8 @@ export function YoutubePlayer({ trackStreamInfo }: { trackStreamInfo: Promise<st
             videoMedia.play();
         }
         audioMedia.addEventListener('playing', playingListener);
+        videoMedia.addEventListener('playing', playingListener);
+
 
         const endedListener = () => {
             setMusicQueue(prev => prev.filter((_, idx) => idx != 0));
@@ -52,9 +54,11 @@ export function YoutubePlayer({ trackStreamInfo }: { trackStreamInfo: Promise<st
         audioMedia.addEventListener('pause', pauseListener);
 
         return () => {
-            audioMedia.addEventListener('playing', playingListener);
-            audioMedia.addEventListener('ended', endedListener);
-            audioMedia.addEventListener('pause', pauseListener);
+            audioMedia.removeEventListener('playing', playingListener);
+            videoMedia.removeEventListener('playing', playingListener);
+
+            audioMedia.removeEventListener('ended', endedListener);
+            audioMedia.removeEventListener('pause', pauseListener);
         }
 
 
