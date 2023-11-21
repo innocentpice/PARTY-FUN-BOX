@@ -11,8 +11,9 @@ import {
     MediaSeekBackwardButton,
     MediaSeekForwardButton,
     MediaMuteButton,
-    MediaLoadingIndicator
 } from 'media-chrome/react';
+import { musicQueueAtom } from "../music-queue/state";
+import { useSetAtom } from "jotai";
 
 
 export function YoutubePlayer({ trackStreamInfo }: { trackStreamInfo: Promise<string>; }) {
@@ -23,41 +24,66 @@ export function YoutubePlayer({ trackStreamInfo }: { trackStreamInfo: Promise<st
     const videoRef = React.useRef<HTMLElement & { media: HTMLVideoElement; }>(null);
     const audioRef = React.useRef<HTMLElement & { media: HTMLAudioElement; }>(null);
 
-    React.useEffect(() => {
-        audioRef.current?.media.addEventListener('playing', () => {
-            if (!videoRef.current || !audioRef.current) return;
-            videoRef.current.media.currentTime = audioRef.current.media.currentTime;
-            videoRef.current.media.play();
-        });
-
-        audioRef.current?.media.addEventListener('pause', () => {
-            if (!videoRef.current || !audioRef.current) return;
-            videoRef.current.media.pause();
-        });
-    }, []);
+    const setMusicQueue = useSetAtom(musicQueueAtom);
 
     React.useEffect(() => {
-        if (!audioRef.current) return;
-        audioRef.current.media.play();
+
+        const videoMedia = videoRef.current?.media;
+        const audioMedia = audioRef.current?.media;
+
+        if (!videoMedia || !audioMedia) return;
+
+        const playingListener = () => {
+            videoMedia.currentTime = audioMedia.currentTime;
+            videoMedia.play();
+        }
+        audioMedia.addEventListener('playing', playingListener);
+
+        const endedListener = () => {
+            setMusicQueue(prev => prev.filter((_, idx) => idx != 0));
+        }
+        audioMedia.addEventListener('ended', endedListener);
+
+
+        const pauseListener = () => {
+            videoMedia.pause();
+        }
+        audioMedia.addEventListener('pause', pauseListener);
+
+        return () => {
+            audioMedia.addEventListener('playing', playingListener);
+            audioMedia.addEventListener('ended', endedListener);
+            audioMedia.addEventListener('pause', pauseListener);
+        }
+
+
+    }, [setMusicQueue]);
+
+    React.useEffect(() => {
+        const audioMedia = audioRef.current?.media;
+        if (!audioMedia) return;
+
+        audioMedia.play();
     }, [streamAudioUrl]);
 
     return (
-        <div className="flex flex-row">
+        <div className="flex flex-row items-center gap-5">
             <MediaController ref={videoRef} >
                 <video
-                    className="flex w-full h-full"
+                    className="flex w-full h-full max-h-20"
                     slot="media"
                     src={streamVideoUrl || ""}
-                    preload="auto" />
+                    preload="auto"
+                    muted
+                />
             </MediaController>
             <MediaController audio ref={audioRef}>
                 <audio
-                    className="flex w-full h-full"
                     slot="media"
                     src={streamAudioUrl || ""}
-                    preload="auto" />
-                <MediaLoadingIndicator />
-                <MediaControlBar>
+                    preload="auto"
+                />
+                <MediaControlBar className="flex w-full h-full">
                     <MediaPlayButton></MediaPlayButton>
                     <MediaSeekBackwardButton></MediaSeekBackwardButton>
                     <MediaSeekForwardButton></MediaSeekForwardButton>

@@ -16,7 +16,7 @@ export async function getYoutubeStream(youtubeURL: string) {
       filter: 'videoonly',
     }),
     audio: YoutubeDLCore.chooseFormat(trackInfo.formats, {
-      quality: '',
+      quality: 'highestaudio',
       filter: 'audioonly',
     }),
   };
