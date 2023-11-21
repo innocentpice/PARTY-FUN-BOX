@@ -1,48 +1,68 @@
 'use client';
-
 import React from "react";
-import { YoutubePlayerControlAtom } from "./youtube.player.control"
-import { useSetAtom } from "jotai";
+import { YoutubeStreamInfo } from "./action";
+import {
+    MediaController,
+    MediaControlBar,
+    MediaTimeRange,
+    MediaTimeDisplay,
+    MediaVolumeRange,
+    MediaPlayButton,
+    MediaSeekBackwardButton,
+    MediaSeekForwardButton,
+    MediaMuteButton,
+    MediaLoadingIndicator
+} from 'media-chrome/react';
 
-export default function YoutubePlayer() {
-    const playerElmRef = React.useRef<HTMLDivElement>(null);
-    const setYoutubePlayerControlAtom = useSetAtom(YoutubePlayerControlAtom);
+
+export function YoutubePlayer({ trackStreamInfo }: { trackStreamInfo: Promise<string>; }) {
+    const trackInfo: YoutubeStreamInfo | undefined = React.use(trackStreamInfo.then(JSON.parse).catch(() => { }));
+    const streamVideoUrl = trackInfo?.video.url.replace("https://", "/proxy/");
+    const streamAudioUrl = trackInfo?.audio.url.replace("https://", "/proxy/");
+
+    const videoRef = React.useRef<HTMLElement & { media: HTMLVideoElement; }>(null);
+    const audioRef = React.useRef<HTMLElement & { media: HTMLAudioElement; }>(null);
 
     React.useEffect(() => {
-
-        const youtubePlayer = new YT.Player(playerElmRef.current as HTMLDivElement, {
-            width: "100%",
-            height: "100%",
-            videoId: "1wq47tabJh0",
-            playerVars: {
-                autoplay: 1,
-                playsinline: 1,
-                modestbranding: 1
-            },
-            events: {
-                onApiChange: (...param) => console.log(`onApiChange`, param),
-                onError: (...param) => console.log(`onError`, param),
-                onPlaybackQualityChange: (...param) => console.log(`onPlaybackQualityChange`, param),
-                onPlaybackRateChange: (...param) => console.log(`onPlaybackRateChange`, param),
-                onReady: (...param) => () => {
-                    console.log(`onReady`, param)
-                },
-                onStateChange: ({ data }) => {
-                    if (data === YT.PlayerState.UNSTARTED) {
-                        setYoutubePlayerControlAtom(youtubePlayer);
-                    }
-                },
-            },
+        audioRef.current?.media.addEventListener('playing', () => {
+            if (!videoRef.current || !audioRef.current) return;
+            videoRef.current.media.currentTime = audioRef.current.media.currentTime;
+            videoRef.current.media.play();
         });
 
-        return () => {
-            youtubePlayer.destroy?.();
-            setYoutubePlayerControlAtom(undefined);
-        }
+        audioRef.current?.media.addEventListener('pause', () => {
+            if (!videoRef.current || !audioRef.current) return;
+            videoRef.current.media.pause();
+        });
+    }, []);
 
-    }, [setYoutubePlayerControlAtom]);
+    return (
+        <div className="flex flex-row">
+            <MediaController ref={videoRef} >
+                <video
+                    className="flex w-full h-full"
+                    slot="media"
+                    src={streamVideoUrl || ""}
+                    preload="auto" />
+            </MediaController>
+            <MediaController audio ref={audioRef}>
+                <audio
+                    className="flex w-full h-full"
+                    slot="media"
+                    src={streamAudioUrl || ""}
+                    preload="auto" />
+                <MediaLoadingIndicator />
+                <MediaControlBar>
+                    <MediaPlayButton></MediaPlayButton>
+                    <MediaSeekBackwardButton></MediaSeekBackwardButton>
+                    <MediaSeekForwardButton></MediaSeekForwardButton>
+                    <MediaTimeRange></MediaTimeRange>
+                    <MediaTimeDisplay showDuration></MediaTimeDisplay>
+                    <MediaMuteButton></MediaMuteButton>
+                    <MediaVolumeRange></MediaVolumeRange>
+                </MediaControlBar>
+            </MediaController>
 
-    return <div className="flex aspect-w-16 aspect-h-9 w-full">
-        <div id="yt-player" className="rounded-2xl" ref={playerElmRef} />
-    </div>
+        </div>
+    );
 }

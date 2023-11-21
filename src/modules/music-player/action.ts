@@ -2,13 +2,24 @@
 
 import YoutubeDLCore from '@distube/ytdl-core';
 
-export type YoutubeStreamInfo = YoutubeDLCore.videoFormat;
+export type YoutubeStreamInfo = {
+  video: YoutubeDLCore.videoFormat;
+  audio: YoutubeDLCore.videoFormat;
+};
 
 export async function getYoutubeStream(youtubeURL: string) {
   const trackInfo = await YoutubeDLCore.getInfo(youtubeURL);
-  const formatInfo = YoutubeDLCore.chooseFormat(trackInfo.formats, {
-    quality: 'highestaudio',
-  });
+
+  const formatInfo: YoutubeStreamInfo = {
+    video: YoutubeDLCore.chooseFormat(trackInfo.formats, {
+      quality: 'lowestvideo',
+      filter: 'videoonly',
+    }),
+    audio: YoutubeDLCore.chooseFormat(trackInfo.formats, {
+      quality: '',
+      filter: 'audioonly',
+    }),
+  };
 
   return JSON.stringify(formatInfo);
 }

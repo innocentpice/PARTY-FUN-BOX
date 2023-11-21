@@ -22,7 +22,7 @@ export default function MusicSearchPage() {
     return <div className="flex flex-col h-full gap-3">
         <div className="flex relative w-full content-center text-center items-center gap-4">
             <SearchIcon className="absolute ml-3 p-1" />
-            <input type="text" placeholder="ค้นหาเพลง" value="mood lofi" className="bg-slate-600/20 rounded-full placeholder:text-gray-400/50 text-sm px-10 w-full" onChange={(event) => {
+            <input type="text" placeholder="ค้นหาเพลง" className="bg-slate-600/20 rounded-full placeholder:text-gray-400/50 text-sm px-10 w-full" onChange={(event) => {
                 try {
                     clearTimeout(window.searchDebounce)
                 } catch (err) {

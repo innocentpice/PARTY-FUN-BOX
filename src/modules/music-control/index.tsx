@@ -1,6 +1,6 @@
 'use client';
 import React from "react";
-import { YoutubePlayerControlAtom } from "../music-player/youtube.player.control";
+import { YoutubePlayerControlAtom } from "../music-player/youtube-iframe.player.control";
 import { useAtom, useAtomValue } from "jotai";
 import { musicControlMachineAtom } from "./music-control.state";
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon, PlayCircleIcon } from "lucide-react";
