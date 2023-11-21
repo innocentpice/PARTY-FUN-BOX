@@ -67,10 +67,12 @@ export function YoutubePlayer({ trackStreamInfo }: { trackStreamInfo: Promise<st
     }, [streamAudioUrl]);
 
     return (
-        <div className="flex flex-row items-center gap-5">
-            <MediaController ref={videoRef} >
+        <div className="flex flex-row items-center gap-5 relative">
+            {/* <MediaController ref={videoRef} className="h-20 absolute top-[calc(theme(spacing.20)*-1)]"> */}
+            <MediaController ref={videoRef}>
+                <div className="absolute top-0 left-0 w-full h-full opacity-0"></div>
                 <video
-                    className="flex w-full h-full max-h-20"
+                    className="flex w-full h-full max-h-20 rounded-lg"
                     slot="media"
                     src={streamVideoUrl || ""}
                     preload="auto"
