@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx serve",
+    "dev": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "start": "next start ./dist/party-fun-box"
   },
   "private": true,
   "dependencies": {
@@ -20,8 +21,8 @@
     "next": "13.4.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hifi": "^2.2.1",
     "react-string-format": "^1.0.1",
+    "sharp": "^0.32.6",
     "tailwind-merge": "^2.0.0",
     "tslib": "^2.3.0",
     "xstate": "^4.38.3",

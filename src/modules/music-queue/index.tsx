@@ -5,7 +5,6 @@ import { ListMusicIcon, YoutubeIcon } from "lucide-react";
 import { useAtom } from 'jotai';
 import { musicQueueAtom } from './state';
 import Image from 'next/image';
-import { Video } from 'youtube-sr';
 
 export default function MusicQueue() {
   const [musisQueue, setMusisQueue] = useAtom(musicQueueAtom);
@@ -23,7 +22,11 @@ export default function MusicQueue() {
     <div className="flex flex-col">
       {musisQueue.map((video) => <div key={video.id} className="flex gap-2 hover:bg-slate-700/10 rounded-md p-2 cursor-pointer" onClick={() => {
         video.id && setMusisQueue((prev) => {
-          return [prev.find(({ id }) => id == video.id) as Video].concat(prev.filter(({ id }) => id != video.id)).flat();
+          const result = prev.filter(({ id }) => id != video.id);
+          const targetTrack = prev.find(({ id }) => id == video.id);
+          if (targetTrack) result.unshift(targetTrack);
+
+          return result;
         })
       }}>
         <div className="flex w-full @md:w-1/5">
