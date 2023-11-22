@@ -1,6 +1,5 @@
 'use client';
 import React from "react";
-import { YoutubeStreamInfo } from "./action";
 import {
     MediaController,
     MediaControlBar,
@@ -39,17 +38,16 @@ export function YoutubeAudioPlayer() {
     return <MediaController audio ref={audioRef}>
         <audio
             slot="media"
-            src=""
             preload="auto"
         />
         <MediaControlBar className="flex w-full h-full">
-            <MediaPlayButton></MediaPlayButton>
-            <MediaSeekBackwardButton></MediaSeekBackwardButton>
-            <MediaSeekForwardButton></MediaSeekForwardButton>
-            <MediaTimeRange></MediaTimeRange>
-            <MediaTimeDisplay showDuration></MediaTimeDisplay>
-            <MediaMuteButton></MediaMuteButton>
-            <MediaVolumeRange></MediaVolumeRange>
+            <MediaPlayButton />
+            <MediaSeekBackwardButton />
+            <MediaSeekForwardButton />
+            <MediaTimeRange />
+            <MediaTimeDisplay showDuration />
+            <MediaMuteButton />
+            <MediaVolumeRange />
         </MediaControlBar>
     </MediaController>
 }
@@ -68,7 +66,6 @@ export function YoutubeVideoPlayer() {
         <video
             className="flex w-full h-full rounded-lg"
             slot="media"
-            src=""
             preload="auto"
             playsInline
             muted

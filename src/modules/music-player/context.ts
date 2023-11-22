@@ -24,7 +24,27 @@ export const youtubePlayerAtom = atom((get) => {
       youtubeVideo.pause();
     };
     youtubeAudio.addEventListener('pause', pauseListener);
-    youtubeVideo.addEventListener('pause', pauseListener);
+
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.setActionHandler('play', () => {
+        youtubeAudio.play();
+      });
+
+      navigator.mediaSession.setActionHandler('pause', () => {
+        youtubeAudio.pause();
+      });
+
+      navigator.mediaSession.setActionHandler('seekto', (event) => {
+        if (!event.seekTime) return;
+
+        if (event.fastSeek && 'fastSeek' in youtubeAudio) {
+          youtubeAudio.fastSeek(event.seekTime);
+          return;
+        }
+
+        youtubeAudio.currentTime = event.seekTime;
+      });
+    }
   }
 
   return { youtubeAudio, youtubeVideo };

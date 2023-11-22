@@ -33,11 +33,9 @@ export default function MusicPlayer() {
         if (youtubeAudio && streamAudioUrl && youtubeAudio.src !== streamAudioUrl) {
             youtubeAudio.src = streamAudioUrl;
             youtubeAudio.load();
-            youtubeAudio.play();
+            youtubeAudio.play().catch(console.log);
         }
     }, [streamAudioUrl, youtubeAudio]);
 
-    return React.useMemo(() => <React.Suspense fallback="LOADING...">
-        <YoutubePlayer />
-    </React.Suspense>, []);
+    return <YoutubePlayer />;
 }
