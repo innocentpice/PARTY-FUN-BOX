@@ -9,10 +9,14 @@ import { youtubePlayerAtom } from "./context";
 
 export default function MusicPlayer() {
     const [musicQueue, setMusicQueue] = useAtom(musicQueueAtom);
-    const fistTrack = musicQueue[0];
+    const fistTrack = musicQueue?.[0] ? musicQueue[0] : undefined;
 
     const { youtubeVideo, youtubeAudio } = useAtomValue(youtubePlayerAtom);
     const [trackInfo, setTrackInfo] = useState<YoutubeStreamInfo | undefined>(undefined);
+
+    const streamVideoUrl = trackInfo?.video.url;
+    const streamAudioUrl = trackInfo?.audio.url;
+    const audioDuration = trackInfo?.audio.approxDurationMs ? Number.parseFloat(trackInfo?.audio.approxDurationMs) / 1000 + 2 : null;
 
     React.useEffect(() => {
         if (fistTrack) {
@@ -23,9 +27,6 @@ export default function MusicPlayer() {
     }, [fistTrack]);
 
     React.useEffect(() => {
-        const streamVideoUrl = trackInfo?.video.url.replace("https://", "/proxy/");
-        const streamAudioUrl = trackInfo?.audio.url.replace("https://", "/proxy/");
-
         if (youtubeVideo && streamVideoUrl && youtubeVideo.src !== streamVideoUrl) {
             youtubeVideo.src = streamVideoUrl;
             youtubeVideo.load();
@@ -36,17 +37,28 @@ export default function MusicPlayer() {
             youtubeAudio.load();
             youtubeAudio.play().catch(console.log);
         }
-    }, [trackInfo?.audio.url, trackInfo?.video.url, youtubeAudio, youtubeVideo]);
+    }, [streamAudioUrl, streamVideoUrl, youtubeAudio, youtubeVideo]);
 
     React.useEffect(() => {
         const goNextTrack = () => {
-            setMusicQueue((prev) => prev.slice(1));
+            if (!youtubeAudio || !audioDuration) return;
+            if (youtubeAudio.currentTime > audioDuration) youtubeAudio.currentTime = youtubeAudio.duration;
+        }
+        youtubeAudio?.addEventListener('timeupdate', goNextTrack)
+        return () => {
+            youtubeAudio?.removeEventListener('timeupdate', goNextTrack)
+        }
+    }, [audioDuration, setMusicQueue, youtubeAudio]);
+
+    React.useEffect(() => {
+        const goNextTrack = () => {
+            setMusicQueue((prev) => prev.filter(track => track.id !== fistTrack?.id));
         }
         youtubeAudio?.addEventListener('ended', goNextTrack)
         return () => {
             youtubeAudio?.removeEventListener('ended', goNextTrack)
         }
-    }, [setMusicQueue, youtubeAudio]);
+    }, [fistTrack?.id, setMusicQueue, youtubeAudio]);
 
     return React.useMemo(() => <YoutubePlayer />, [])
 }

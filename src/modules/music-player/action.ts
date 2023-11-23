@@ -27,5 +27,10 @@ export async function getYoutubeStream(youtubeURL: string) {
     ),
   };
 
+  if (formatInfo.audio.url)
+    formatInfo.audio.url = formatInfo.audio.url.replace('https://', '/proxy/');
+  if (formatInfo.video.url)
+    formatInfo.video.url = formatInfo.video.url.replace('https://', '/proxy/');
+
   return JSON.stringify(formatInfo);
 }
