@@ -4,7 +4,6 @@ import { HomeIcon, SearchIcon } from "lucide-react"
 import './global.css';
 import Link from 'next/link';
 import { Metadata } from "next/types"
-import MusicControl from 'src/modules/music-control';
 import MusicQueue from '../modules/music-queue';
 import MusicPlayer from 'src/modules/music-player';
 

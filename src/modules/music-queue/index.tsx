@@ -7,7 +7,7 @@ import { musicQueueAtom } from './state';
 import Image from 'next/image';
 
 export default function MusicQueue() {
-  const [musisQueue, setMusisQueue] = useAtom(musicQueueAtom);
+  const [musicQueue, setMusicQueue] = useAtom(musicQueueAtom);
 
   return <div className="flex flex-col gap-3 bg-slate-600/20 h-full rounded-xl p-3 pb-20">
     <div className="flex p-2">
@@ -20,8 +20,8 @@ export default function MusicQueue() {
     </div>
     <hr />
     <div className="flex flex-col">
-      {musisQueue.map((video) => <div key={video.id} className="flex gap-2 hover:bg-slate-700/10 rounded-md p-2 cursor-pointer" onClick={() => {
-        video.id && setMusisQueue((prev) => {
+      {musicQueue.map((video) => <div key={video.id} className="flex gap-2 hover:bg-slate-700/10 rounded-md p-2 cursor-pointer" onClick={() => {
+        video.id && setMusicQueue((prev) => {
           const result = prev.filter(({ id }) => id != video.id);
           const targetTrack = prev.find(({ id }) => id == video.id);
           if (targetTrack) result.unshift(targetTrack);
