@@ -48,5 +48,5 @@ export default function MusicPlayer() {
         }
     }, [setMusicQueue, youtubeAudio]);
 
-    return <YoutubePlayer />
+    return React.useMemo(() => <YoutubePlayer />, [])
 }
