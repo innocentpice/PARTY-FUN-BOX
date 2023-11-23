@@ -19,6 +19,19 @@ export default function MusicPlayer() {
     const audioDuration = trackInfo?.audio.approxDurationMs ? Number.parseFloat(trackInfo?.audio.approxDurationMs) / 1000 + 2 : null;
 
     React.useEffect(() => {
+        if (!("MediaMetadata" in window) || !('mediaSession' in navigator)) return;
+
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: fistTrack?.title || "",
+            album: "",
+            artist: fistTrack?.channel?.name || "",
+            artwork: [{
+                src: fistTrack?.thumbnail?.url || "",
+            }]
+        });
+    }, [fistTrack?.channel?.name, fistTrack?.thumbnail?.url, fistTrack?.title]);
+
+    React.useEffect(() => {
         if (fistTrack) {
             if (document.getElementsByTagName("title")?.[0])
                 document.getElementsByTagName("title")[0].innerHTML = `PARTY FUN BOX - ${fistTrack.title}`;
@@ -42,16 +55,18 @@ export default function MusicPlayer() {
     React.useEffect(() => {
         const goNextTrack = () => {
             if (!youtubeAudio || !audioDuration) return;
-            if (youtubeAudio.currentTime > audioDuration) youtubeAudio.currentTime = youtubeAudio.duration;
+            if (youtubeAudio.currentTime > audioDuration && streamAudioUrl && youtubeAudio.src.endsWith(streamAudioUrl)) youtubeAudio.currentTime = youtubeAudio.duration;
         }
         youtubeAudio?.addEventListener('timeupdate', goNextTrack)
         return () => {
             youtubeAudio?.removeEventListener('timeupdate', goNextTrack)
         }
-    }, [audioDuration, setMusicQueue, youtubeAudio]);
+    }, [audioDuration, setMusicQueue, streamAudioUrl, youtubeAudio]);
 
     React.useEffect(() => {
         const goNextTrack = () => {
+            if (youtubeAudio)
+                youtubeAudio.currentTime = 0;
             setMusicQueue((prev) => prev.filter(track => track.id !== fistTrack?.id));
         }
         youtubeAudio?.addEventListener('ended', goNextTrack)
