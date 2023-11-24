@@ -7,28 +7,22 @@ import { searchMedias, MediaItem } from "./actions";
 import { useSetAtom } from "jotai";
 import { musicQueueAtom } from "src/modules/music-queue/state";
 
-
-declare global {
-    interface Window {
-        searchDebounce?: NodeJS.Timeout
-    }
-}
-
 export default function MusicSearchPage() {
     const setMusicQueue = useSetAtom(musicQueueAtom);
     const [searchResult, setSearchResult] = React.useState<MediaItem[]>([]);
+    const searchDebounceRef = React.useRef<ReturnType<typeof setTimeout>>();
 
     return <div className="flex flex-col h-full gap-3">
         <div className="flex relative w-full content-center text-center items-center gap-4">
             <SearchIcon className="absolute ml-3 p-1" />
             <input type="text" placeholder="ค้นหาเพลง" className="bg-slate-600/20 rounded-full placeholder:text-gray-400/50 text-sm px-10 w-full" onChange={(event) => {
                 try {
-                    clearTimeout(window.searchDebounce)
+                    clearTimeout(searchDebounceRef.current);
                 } catch (err) {
                     console.log(err)
                 }
 
-                window.searchDebounce = setTimeout(() => {
+                searchDebounceRef.current = setTimeout(() => {
                     if (!event.target.value || event.target.value === "") return;
                     searchMedias(event.target.value).then(res => setSearchResult(JSON.parse(res)))
                 }, 500);
