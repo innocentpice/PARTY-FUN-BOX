@@ -4,7 +4,7 @@ import YoutubeSearch, { Video } from 'youtube-sr';
 
 export type MediaItem = {
   source: 'YOUTUBE';
-} & Video;
+} & ReturnType<Video['toJSON']>;
 
 export async function searchMedias(searchTerms: string) {
   const searchResult = await YoutubeSearch.search(searchTerms, {

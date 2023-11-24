@@ -4,13 +4,16 @@ import { PlusCircleIcon, SearchIcon, YoutubeIcon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { searchMedias, MediaItem } from "./actions";
-import { useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { musicQueueAtom } from "src/modules/music-queue/state";
+import { realmCollectionsAtom } from "../context/realm.context";
 
 export default function MusicSearchPage() {
     const setMusicQueue = useSetAtom(musicQueueAtom);
     const [searchResult, setSearchResult] = React.useState<MediaItem[]>([]);
     const searchDebounceRef = React.useRef<ReturnType<typeof setTimeout>>();
+    const realmCollections = useAtomValue(realmCollectionsAtom);
+    const isOfflineMode = false;
 
     return <div className="flex flex-col h-full gap-3">
         <div className="flex relative w-full content-center text-center items-center gap-4">
@@ -42,9 +45,11 @@ export default function MusicSearchPage() {
                 </div>
                 <div className="hidden group-hover:flex absolute text-xs items-center w-full h-full top-0 left-0">
                     <button
-                        className="flex flex-col m-auto text-white font-semibold hover:underline hover:text-white hover:opacity-90 cursor-pointer items-center gap-2"
+                        className="flex flex-col m-auto text-white font-semibold hover:underline hover:opacity-90 cursor-pointer items-center gap-2"
                         onClick={() => {
-                            setMusicQueue(prev => [...prev, video]);
+                            isOfflineMode ?
+                                setMusicQueue(prev => [...prev, video])
+                                : realmCollections?.playlist?.updateOne({ source: video.source, id: video.id }, { $set: video }, { upsert: true })
                         }}
                     >
                         <div className="flex w-10 h-10">

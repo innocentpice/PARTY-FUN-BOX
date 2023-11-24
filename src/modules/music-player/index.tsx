@@ -1,18 +1,23 @@
 'use client'
 
 import React, { useState } from "react";
-import { musicQueueAtom } from "../music-queue/state";
+import { forcePlayAtom, musicQueueAtom } from "../music-queue/state";
 import { useAtom, useAtomValue } from "jotai";
 import { YoutubeStreamInfo, getYoutubeStream } from "./action";
 import { YoutubePlayer } from "./youtube.player";
 import { youtubePlayerAtom } from "./context";
+import { realmCollectionsAtom } from "src/app/context/realm.context";
+
 
 export default function MusicPlayer() {
+    const [forcePlay, setForcePlay] = useAtom(forcePlayAtom);
     const [musicQueue, setMusicQueue] = useAtom(musicQueueAtom);
-    const fistTrack = musicQueue?.[0] ? musicQueue[0] : undefined;
+
+    const playingTrack = musicQueue.find(({ id }) => id == forcePlay) || (musicQueue?.[0] ? musicQueue[0] : undefined);
+    const realmCollections = useAtomValue(realmCollectionsAtom);
 
     const { youtubeVideo, youtubeAudio } = useAtomValue(youtubePlayerAtom);
-    const [trackInfo, setTrackInfo] = useState<YoutubeStreamInfo | undefined>(undefined);
+    const [trackInfo, setTrackInfo] = useState<YoutubeStreamInfo & { id: string } | undefined>(undefined);
 
     const streamVideoUrl = trackInfo?.video.url;
     const streamAudioUrl = trackInfo?.audio.url;
@@ -22,35 +27,37 @@ export default function MusicPlayer() {
         if (!("MediaMetadata" in window) || !('mediaSession' in navigator)) return;
 
         navigator.mediaSession.metadata = new MediaMetadata({
-            title: fistTrack?.title || "",
+            title: playingTrack?.title || "",
             album: "",
-            artist: fistTrack?.channel?.name || "",
+            artist: playingTrack?.channel?.name || "",
             artwork: [{
-                src: fistTrack?.thumbnail?.url || "",
+                src: playingTrack?.thumbnail?.url || "",
             }]
         });
-    }, [fistTrack?.channel?.name, fistTrack?.thumbnail?.url, fistTrack?.title]);
+    }, [playingTrack?.channel?.name, playingTrack?.thumbnail?.url, playingTrack?.title]);
 
     React.useEffect(() => {
-        if (fistTrack) {
+        if (playingTrack) {
             if (document.getElementsByTagName("title")?.[0])
-                document.getElementsByTagName("title")[0].innerHTML = `PARTY FUN BOX - ${fistTrack.title}`;
-            getYoutubeStream(`https://www.youtube.com/watch?v=${fistTrack.id}`).then(JSON.parse).then(setTrackInfo).catch(console.log);
+                document.getElementsByTagName("title")[0].innerHTML = `PARTY FUN BOX - ${playingTrack.title}`;
+            getYoutubeStream(`https://www.youtube.com/watch?v=${playingTrack.id}`).then(JSON.parse).then(track => setTrackInfo({ ...track, id: playingTrack.id })).catch(console.log);
         }
-    }, [fistTrack]);
+    }, [playingTrack]);
 
     React.useEffect(() => {
-        if (youtubeVideo && streamVideoUrl && youtubeVideo.src !== streamVideoUrl) {
+        if (youtubeVideo && streamVideoUrl && youtubeVideo.dataset['trackId'] !== trackInfo.id) {
             youtubeVideo.src = streamVideoUrl;
+            youtubeVideo.dataset['trackId'] = trackInfo.id;
             youtubeVideo.load();
         }
 
-        if (youtubeAudio && streamAudioUrl && youtubeAudio.src !== streamAudioUrl) {
+        if (youtubeAudio && streamAudioUrl && youtubeAudio.dataset['trackId'] !== trackInfo.id) {
             youtubeAudio.src = streamAudioUrl;
+            youtubeAudio.dataset['trackId'] = trackInfo.id;
             youtubeAudio.load();
             youtubeAudio.play().catch(console.log);
         }
-    }, [streamAudioUrl, streamVideoUrl, youtubeAudio, youtubeVideo]);
+    }, [streamAudioUrl, streamVideoUrl, trackInfo?.id, youtubeAudio, youtubeVideo]);
 
     React.useEffect(() => {
         const goNextTrack = () => {
@@ -67,13 +74,19 @@ export default function MusicPlayer() {
         const goNextTrack = () => {
             if (youtubeAudio)
                 youtubeAudio.currentTime = 0;
-            setMusicQueue((prev) => prev.filter(track => track.id !== fistTrack?.id));
+            setMusicQueue((prev) => prev.filter(track => track.id !== playingTrack?.id));
+            if (playingTrack) realmCollections.playlist?.deleteOne({
+                source: playingTrack.source,
+                id: playingTrack.id
+            })
+
+            if (playingTrack?.id === forcePlay) setForcePlay(null);
         }
         youtubeAudio?.addEventListener('ended', goNextTrack)
         return () => {
             youtubeAudio?.removeEventListener('ended', goNextTrack)
         }
-    }, [fistTrack?.id, setMusicQueue, youtubeAudio]);
+    }, [forcePlay, playingTrack, realmCollections.playlist, setForcePlay, setMusicQueue, youtubeAudio]);
 
     return React.useMemo(() => <YoutubePlayer />, [])
 }

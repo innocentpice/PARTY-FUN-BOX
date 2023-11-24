@@ -5,7 +5,7 @@ import { YoutubePlayerControlAtom } from "./youtube-iframe.player.control"
 import { useSetAtom } from "jotai";
 
 export default function YoutubePlayerIframe() {
-    const playerElmRef = React.useRef<HTMLDivElement>();
+    const playerElmRef = React.useRef<HTMLDivElement>(null);
     const setYoutubePlayerControlAtom = useSetAtom(YoutubePlayerControlAtom);
 
     React.useEffect(() => {
