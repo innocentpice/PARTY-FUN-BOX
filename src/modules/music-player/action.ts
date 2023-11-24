@@ -14,9 +14,10 @@ export async function getYoutubeStream(youtubeURL: string) {
   const formatInfo: YoutubeStreamInfo = {
     trackInfo,
     video: YoutubeDLCore.chooseFormat(
-      trackInfo.formats.filter((item) => item.container === 'mp4'),
+      trackInfo.formats.filter(
+        (item) => item.quality === 'medium' || item.quality === 'large'
+      ),
       {
-        quality: 'lowestvideo',
         filter: 'videoonly',
       }
     ),

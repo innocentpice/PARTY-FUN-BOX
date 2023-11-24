@@ -1,4 +1,5 @@
 'use client';
+
 import React from "react";
 import {
     MediaController,
@@ -10,15 +11,18 @@ import {
     MediaSeekBackwardButton,
     MediaSeekForwardButton,
     MediaMuteButton,
+    MediaFullscreenButton,
+    MediaPipButton
 } from 'media-chrome/react';
+
 import { useSetAtom } from "jotai";
 import { youtubeAudioPlayerAtom, youtubeVideoPlayerAtom } from "./context";
-import useIsMobile from "src/hooks/useIsMobile";
+import useDeviceInfo from "src/hooks/useDeviceInfo";
 
 export function YoutubeAudioPlayer() {
     const audioRef = React.useRef<HTMLElement & { media: HTMLAudioElement; }>(null);
     const setYoutubeAudioPlayer = useSetAtom(youtubeAudioPlayerAtom);
-    const isMobile = useIsMobile();
+    const { isMobile } = useDeviceInfo();
 
     React.useEffect(() => {
         setYoutubeAudioPlayer(audioRef.current?.media || null);
@@ -61,4 +65,5 @@ export function YoutubeVideoPlayer() {
             muted
         />
     </MediaController>
+
 }

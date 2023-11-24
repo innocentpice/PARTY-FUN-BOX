@@ -7,7 +7,7 @@ import { YoutubeStreamInfo, getYoutubeStream } from "./action";
 import { YoutubeAudioPlayer } from "./youtube.player";
 import { youtubePlayerAtom } from "./context";
 import { realmCollectionsAtom } from "src/app/context/realm.context";
-import useIsMobile from "src/hooks/useIsMobile";
+import useDeviceInfo from "src/hooks/useDeviceInfo";
 
 
 export default function MusicPlayer() {
@@ -16,13 +16,12 @@ export default function MusicPlayer() {
 
     const playingTrack = musicQueue.find(({ id }) => id == forcePlay) || (musicQueue?.[0] ? musicQueue[0] : undefined);
     const realmCollections = useAtomValue(realmCollectionsAtom);
-    const isMobile = useIsMobile();
-
+    const { isMobile } = useDeviceInfo();
 
     const { youtubeVideo, youtubeAudio } = useAtomValue(youtubePlayerAtom);
     const [trackInfo, setTrackInfo] = useState<YoutubeStreamInfo & { id: string } | undefined>(undefined);
 
-    const mobileOnlyTrackUrl = (trackInfo?.trackInfo.player_response.streamingData.formats.at(0) as { url: string } | undefined)?.url;
+    const mobileOnlyTrackUrl = (trackInfo?.trackInfo?.player_response?.streamingData?.formats?.[0] as { url: string } | undefined)?.url;
     const streamVideoUrl = isMobile ? mobileOnlyTrackUrl : trackInfo?.video.url;
     const streamAudioUrl = isMobile ? mobileOnlyTrackUrl : trackInfo?.audio.url;
     const audioDuration = trackInfo?.audio.approxDurationMs ? Number.parseFloat(trackInfo?.audio.approxDurationMs) / 1000 + 2 : null;

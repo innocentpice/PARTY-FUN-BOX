@@ -1,3 +1,5 @@
+'use client'
+
 import React from "react";
 import { PlaylistDocument } from "src/app/context/realm.context.type";
 
