@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { forcePlayAtom, musicQueueAtom } from "../music-queue/state";
 import { useAtom, useAtomValue } from "jotai";
 import { YoutubeStreamInfo, getYoutubeStream } from "./action";
-import { YoutubeAudioPlayer, YoutubePlayer } from "./youtube.player";
+import { YoutubeAudioPlayer } from "./youtube.player";
 import { youtubePlayerAtom } from "./context";
 import { realmCollectionsAtom } from "src/app/context/realm.context";
 
@@ -16,10 +16,11 @@ export default function MusicPlayer() {
     const playingTrack = musicQueue.find(({ id }) => id == forcePlay) || (musicQueue?.[0] ? musicQueue[0] : undefined);
     const realmCollections = useAtomValue(realmCollectionsAtom);
 
+
     const { youtubeVideo, youtubeAudio } = useAtomValue(youtubePlayerAtom);
     const [trackInfo, setTrackInfo] = useState<YoutubeStreamInfo & { id: string } | undefined>(undefined);
 
-    const streamVideoUrl = trackInfo?.video.url;
+    const streamVideoUrl = (trackInfo?.trackInfo.player_response.streamingData.formats.at(0) as { url: string } | undefined)?.url || trackInfo?.video.url;
     const streamAudioUrl = trackInfo?.audio.url;
     const audioDuration = trackInfo?.audio.approxDurationMs ? Number.parseFloat(trackInfo?.audio.approxDurationMs) / 1000 + 2 : null;
 
@@ -46,7 +47,6 @@ export default function MusicPlayer() {
 
     React.useEffect(() => {
         if (youtubeVideo && streamVideoUrl && youtubeVideo.dataset['trackId'] !== trackInfo.id) {
-            console.log("loading video");
             youtubeVideo.src = streamVideoUrl;
             youtubeVideo.dataset['trackId'] = trackInfo.id;
             youtubeVideo.load();

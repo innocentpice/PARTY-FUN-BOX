@@ -3,6 +3,7 @@
 import YoutubeDLCore from '@distube/ytdl-core';
 
 export type YoutubeStreamInfo = {
+  trackInfo: YoutubeDLCore.videoInfo;
   video: YoutubeDLCore.videoFormat;
   audio: YoutubeDLCore.videoFormat;
 };
@@ -11,6 +12,7 @@ export async function getYoutubeStream(youtubeURL: string) {
   const trackInfo = await YoutubeDLCore.getInfo(youtubeURL);
 
   const formatInfo: YoutubeStreamInfo = {
+    trackInfo,
     video: YoutubeDLCore.chooseFormat(
       trackInfo.formats.filter((item) => item.container === 'mp4'),
       {
