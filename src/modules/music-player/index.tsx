@@ -7,6 +7,7 @@ import { YoutubeStreamInfo, getYoutubeStream } from "./action";
 import { YoutubeAudioPlayer } from "./youtube.player";
 import { youtubePlayerAtom } from "./context";
 import { realmCollectionsAtom } from "src/app/context/realm.context";
+import useIsMobile from "src/hooks/useIsMobile";
 
 
 export default function MusicPlayer() {
@@ -15,13 +16,15 @@ export default function MusicPlayer() {
 
     const playingTrack = musicQueue.find(({ id }) => id == forcePlay) || (musicQueue?.[0] ? musicQueue[0] : undefined);
     const realmCollections = useAtomValue(realmCollectionsAtom);
+    const isMobile = useIsMobile();
 
 
     const { youtubeVideo, youtubeAudio } = useAtomValue(youtubePlayerAtom);
     const [trackInfo, setTrackInfo] = useState<YoutubeStreamInfo & { id: string } | undefined>(undefined);
 
-    const streamVideoUrl = (trackInfo?.trackInfo.player_response.streamingData.formats.at(0) as { url: string } | undefined)?.url || trackInfo?.video.url;
-    const streamAudioUrl = trackInfo?.audio.url;
+    const mobileOnlyTrackUrl = (trackInfo?.trackInfo.player_response.streamingData.formats.at(0) as { url: string } | undefined)?.url;
+    const streamVideoUrl = isMobile ? mobileOnlyTrackUrl : trackInfo?.video.url;
+    const streamAudioUrl = isMobile ? mobileOnlyTrackUrl : trackInfo?.audio.url;
     const audioDuration = trackInfo?.audio.approxDurationMs ? Number.parseFloat(trackInfo?.audio.approxDurationMs) / 1000 + 2 : null;
 
     React.useEffect(() => {
@@ -46,14 +49,14 @@ export default function MusicPlayer() {
     }, [playingTrack]);
 
     React.useEffect(() => {
-        if (youtubeVideo && streamVideoUrl && youtubeVideo.dataset['trackId'] !== trackInfo.id) {
+        if (youtubeVideo && streamVideoUrl && trackInfo?.id && youtubeVideo.dataset['trackId'] !== trackInfo.id) {
             youtubeVideo.src = streamVideoUrl;
             youtubeVideo.dataset['trackId'] = trackInfo.id;
             youtubeVideo.load();
             youtubeVideo.play().catch(console.log);
         }
 
-        if (youtubeAudio && streamAudioUrl && youtubeAudio.dataset['trackId'] !== trackInfo.id) {
+        if (youtubeAudio && streamAudioUrl && trackInfo?.id && youtubeAudio.dataset['trackId'] !== trackInfo.id) {
             youtubeAudio.src = streamAudioUrl;
             youtubeAudio.dataset['trackId'] = trackInfo.id;
             youtubeAudio.load();

@@ -13,10 +13,12 @@ import {
 } from 'media-chrome/react';
 import { useSetAtom } from "jotai";
 import { youtubeAudioPlayerAtom, youtubeVideoPlayerAtom } from "./context";
+import useIsMobile from "src/hooks/useIsMobile";
 
 export function YoutubeAudioPlayer() {
     const audioRef = React.useRef<HTMLElement & { media: HTMLAudioElement; }>(null);
     const setYoutubeAudioPlayer = useSetAtom(youtubeAudioPlayerAtom);
+    const isMobile = useIsMobile();
 
     React.useEffect(() => {
         setYoutubeAudioPlayer(audioRef.current?.media || null);
@@ -35,7 +37,7 @@ export function YoutubeAudioPlayer() {
             <MediaTimeRange />
             <MediaTimeDisplay showDuration />
             <MediaMuteButton />
-            <MediaVolumeRange />
+            {!isMobile && <MediaVolumeRange />}
         </MediaControlBar>
     </MediaController>
 }
