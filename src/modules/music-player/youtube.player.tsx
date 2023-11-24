@@ -14,18 +14,6 @@ import {
 import { useSetAtom } from "jotai";
 import { youtubeAudioPlayerAtom, youtubeVideoPlayerAtom } from "./context";
 
-export function YoutubePlayer() {
-    return (
-        <div className="flex flex-row items-center gap-5">
-            <div className="flex h-20 w-20 relative">
-                <YoutubeVideoPlayer />
-            </div>
-            <YoutubeAudioPlayer />
-        </div>
-    );
-}
-
-
 export function YoutubeAudioPlayer() {
     const audioRef = React.useRef<HTMLElement & { media: HTMLAudioElement; }>(null);
     const setYoutubeAudioPlayer = useSetAtom(youtubeAudioPlayerAtom);

@@ -65,7 +65,7 @@ export default function RootLayout({
 
             {/* MUSIC CONTROL */}
             <div className="flex h-[theme(spacing.20)] w-full">
-              <div className="flex w-full h-full justify-center">
+              <div className="flex w-full h-full justify-center p-5">
                 <MusicPlayer />
               </div>
             </div>

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { forcePlayAtom, musicQueueAtom } from "../music-queue/state";
 import { useAtom, useAtomValue } from "jotai";
 import { YoutubeStreamInfo, getYoutubeStream } from "./action";
-import { YoutubePlayer } from "./youtube.player";
+import { YoutubeAudioPlayer, YoutubePlayer } from "./youtube.player";
 import { youtubePlayerAtom } from "./context";
 import { realmCollectionsAtom } from "src/app/context/realm.context";
 
@@ -46,9 +46,11 @@ export default function MusicPlayer() {
 
     React.useEffect(() => {
         if (youtubeVideo && streamVideoUrl && youtubeVideo.dataset['trackId'] !== trackInfo.id) {
+            console.log("loading video");
             youtubeVideo.src = streamVideoUrl;
             youtubeVideo.dataset['trackId'] = trackInfo.id;
             youtubeVideo.load();
+            youtubeVideo.play().catch(console.log);
         }
 
         if (youtubeAudio && streamAudioUrl && youtubeAudio.dataset['trackId'] !== trackInfo.id) {
@@ -88,5 +90,5 @@ export default function MusicPlayer() {
         }
     }, [forcePlay, playingTrack, realmCollections.playlist, setForcePlay, setMusicQueue, youtubeAudio]);
 
-    return React.useMemo(() => <YoutubePlayer />, [])
+    return React.useMemo(() => <YoutubeAudioPlayer />, [])
 }
