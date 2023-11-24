@@ -27,7 +27,7 @@ export function YoutubePlayer() {
 
 
 export function YoutubeAudioPlayer() {
-    const audioRef = React.useRef<HTMLElement & { media: HTMLAudioElement; }>(null);
+    const audioRef = React.useRef<HTMLElement & { media: HTMLAudioElement; }>();
     const setYoutubeAudioPlayer = useSetAtom(youtubeAudioPlayerAtom);
 
     React.useEffect(() => {
@@ -53,7 +53,7 @@ export function YoutubeAudioPlayer() {
 }
 
 export function YoutubeVideoPlayer() {
-    const videoRef = React.useRef<HTMLElement & { media: HTMLVideoElement; }>(null);
+    const videoRef = React.useRef<HTMLElement & { media: HTMLVideoElement; }>();
     const setYoutubeVideoPlayer = useSetAtom(youtubeVideoPlayerAtom);
 
     React.useEffect(() => {
