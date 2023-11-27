@@ -15,7 +15,7 @@ type ButterchurnVisualizer = {
 export default function Visualizer() {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
     const animationFrameRequest = React.useRef<number | null>(null);
-    const butterchurnRef = React.useRef<{ createVisualizer: (audioContext: AudioContext, canvas: HTMLCanvasElement, options: { width: number, height: number }) => ButterchurnVisualizer }>();
+    const butterchurnRef = React.useRef<{ createVisualizer: (audioContext: AudioContext, canvas: HTMLCanvasElement, options: { width: number, height: number, textureRatio: number }) => ButterchurnVisualizer }>();
     const butterchurnPresetsRef = React.useRef<{ getPresets(): Record<string, Record<string, unknown>> }>();
     const isButterchurnSupportedRef = React.useRef<() => boolean>();
 
@@ -41,7 +41,8 @@ export default function Visualizer() {
                 const analyserNode = audioCtx.createAnalyser()
                 const visualizer = butterchurn?.createVisualizer(audioCtx, canvasRef.current, {
                     width: 800,
-                    height: 600
+                    height: 600,
+                    textureRatio: 1
                 });
 
                 visualizer?.connectAudio(analyserNode);
