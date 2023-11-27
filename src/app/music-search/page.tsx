@@ -3,7 +3,8 @@
 import { PlusCircleIcon, SearchIcon, YoutubeIcon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
-import { searchMedias, MediaItem } from "./actions";
+import { Combobox } from '@headlessui/react'
+import { searchMedias, MediaItem, getSuggestions } from "./actions";
 import { useAtomValue, useSetAtom } from "jotai";
 import { musicQueueAtom } from "src/modules/music-queue/state";
 import { realmCollectionsAtom } from "../context/realm.context";
@@ -11,26 +12,66 @@ import { realmCollectionsAtom } from "../context/realm.context";
 export default function MusicSearchPage() {
     const setMusicQueue = useSetAtom(musicQueueAtom);
     const [searchResult, setSearchResult] = React.useState<MediaItem[]>([]);
+    const [searchSuggestions, setSearchSuggestions] = React.useState<string[]>([]);
+    const [searchTerms, setSearchTerms] = React.useState<string>("");
     const searchDebounceRef = React.useRef<ReturnType<typeof setTimeout>>();
     const realmCollections = useAtomValue(realmCollectionsAtom);
     const isOfflineMode = false;
 
-    return <div className="flex flex-col h-full gap-3">
-        <div className="flex relative w-full content-center text-center items-center gap-4">
-            <SearchIcon className="absolute ml-3 p-1" />
-            <input type="text" placeholder="ค้นหาเพลง" className="bg-slate-600/20 rounded-full placeholder:text-gray-400/50 text-sm px-10 w-full" onChange={(event) => {
-                try {
-                    clearTimeout(searchDebounceRef.current);
-                } catch (err) {
-                    console.log(err)
-                }
+    const searchHandler = React.useCallback((searchTermsString: string) => {
+        try {
+            clearTimeout(searchDebounceRef.current);
+        } catch (err) {
+            console.log(err)
+        }
 
-                searchDebounceRef.current = setTimeout(() => {
-                    if (!event.target.value || event.target.value === "") return;
-                    searchMedias(event.target.value).then(res => setSearchResult(JSON.parse(res)))
-                }, 500);
-            }} />
-        </div>
+        if (searchTermsString === "") return;
+
+        searchDebounceRef.current = setTimeout(() => {
+            searchMedias(searchTermsString.trim()).then(res => setSearchResult(JSON.parse(res)));
+        }, 500);
+
+    }, []);
+
+    return <div className="flex flex-col h-full gap-3">
+        <Combobox onChange={(value: string | null) => value && setSearchTerms(value)}>
+            <div className="flex relative w-full content-center text-center items-center gap-4">
+                <SearchIcon className="absolute ml-3 p-1" />
+                <Combobox.Input
+                    placeholder="ค้นหาเพลง"
+                    className="bg-slate-600/20 rounded-full placeholder:text-gray-400/50 text-sm px-10 w-full"
+                    value={searchTerms}
+                    onChange={(event) => {
+                        setSearchTerms(event.target.value);
+                        if (event.target.value === "") return;
+                        getSuggestions(event.target.value).then(res => JSON.parse(res)).then(setSearchSuggestions).catch(console.error);
+                    }}
+                    onKeyDown={event => {
+                        if (event.key == "Enter") {
+                            searchHandler(event.currentTarget.value);
+                        }
+                    }}
+                />
+            </div>
+            {
+                searchSuggestions.length > 0 &&
+                <Combobox.Options className="w-full bg-slate-900 py-4 rounded-xl text-sm">
+                    <Combobox.Option value={null}></Combobox.Option>
+                    {searchSuggestions.map((text) =>
+                        <Combobox.Option
+                            key={`search_suggestion_${text}`}
+                            value={text}
+                            className="data-[headlessui-state='active']:bg-slate-800 data-[headlessui-state='active_selected']:bg-slate-800 relative flex flex-row py-2 text-center items-center"
+                        >
+                            <SearchIcon className="absolute ml-3 p-1" />
+                            <div className="flex px-10">
+                                {text}
+                            </div>
+                        </Combobox.Option>)}
+                </Combobox.Options>
+            }
+
+        </Combobox>
 
         <div className="flex flex-wrap overflow-y-scroll">
             {searchResult.map((video) => <div key={video.id} className="flex flex-col w-1/2 @2xl:w-1/3 @5xl:w-1/4 gap-2 p-5 hover:bg-slate-700/50 rounded-lg group relative">
@@ -63,5 +104,5 @@ export default function MusicSearchPage() {
             </div>)}
         </div>
 
-    </div>
+    </div >
 }

@@ -15,3 +15,9 @@ export async function searchMedias(searchTerms: string) {
     searchResult.map((item) => ({ ...item, source: 'YOUTUBE' }))
   );
 }
+
+export async function getSuggestions(searchTerms: string) {
+  const searchResult = await YoutubeSearch.getSuggestions(searchTerms);
+
+  return JSON.stringify(searchResult);
+}
