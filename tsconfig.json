@@ -28,6 +28,7 @@
         "name": "next"
       }
     ],
+    "noImplicitAny": false,
     "types": ["jest", "node", "youtube"]
   },
   "include": [

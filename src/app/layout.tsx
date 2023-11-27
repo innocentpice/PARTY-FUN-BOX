@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Metadata } from "next/types"
 import MusicQueue from '../modules/music-queue';
 import MusicPlayer from 'src/modules/music-player';
+import Visualizer from 'src/modules/music-visualizer';
 
 export const metadata: Metadata = {
   title: 'Welcome to party-fun-box',
@@ -22,6 +23,9 @@ export default function RootLayout({
     <html lang="en">
       <body className='bg-black @container text-gray-400 relative'>
         <script src="https://www.youtube.com/iframe_api" defer />
+        <div className="flex absolute w-full h-full blur-3xl -z-50">
+          <Visualizer />
+        </div>
         <Providers>
           <div className="flex flex-col h-full ">
             {/* MAIN LAYOUT */}
