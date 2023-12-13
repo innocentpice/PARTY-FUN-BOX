@@ -34,7 +34,11 @@ export default function MusicSearchPage() {
     }, []);
 
     return <div className="flex flex-col h-full gap-3">
-        <Combobox onChange={(value: string | null) => value && setSearchTerms(value)}>
+        <Combobox onChange={(value: string | null) => {
+            if (!value) return;
+            setSearchTerms(value);
+            searchHandler(value);
+        }}>
             <div className="flex relative w-full content-center text-center items-center gap-4">
                 <SearchIcon className="absolute ml-3 p-1" />
                 <Combobox.Input
