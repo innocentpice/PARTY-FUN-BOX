@@ -1,6 +1,6 @@
 import React from 'react';
 import Providers from './provider';
-import { HomeIcon, SearchIcon } from "lucide-react"
+import { HomeIcon, SearchIcon, VideoIcon } from "lucide-react"
 import './global.css';
 import Link from 'next/link';
 import { Metadata } from "next/types"
@@ -36,10 +36,10 @@ export default function RootLayout({
                   <Link href="/">
                     <div className="flex flex-row w-full hover:text-white py-2 content-center cursor-pointer">
                       <div className="flex w-full @md:w-1/5 justify-center">
-                        <HomeIcon />
+                        <VideoIcon />
                       </div>
                       <div className="hidden @md:flex">
-                        หน้าหลัก
+                        Video
                       </div>
                     </div>
                   </Link>
