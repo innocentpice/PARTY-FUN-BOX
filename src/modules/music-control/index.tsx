@@ -4,7 +4,7 @@ import React from "react";
 import { YoutubePlayerControlAtom } from "../music-player/youtube-iframe.player.control";
 import { useAtom, useAtomValue } from "jotai";
 import { musicControlMachineAtom } from "./music-control.state";
-import { ArrowLeftCircleIcon, ArrowRightCircleIcon, PlayCircleIcon } from "lucide-react";
+import { ArrowLeftCircleIcon, ArrowRightCircleIcon, PauseCircleIcon, PlayCircleIcon } from "lucide-react";
 import { musicQueueAtom } from "../music-queue/state";
 
 
@@ -13,6 +13,7 @@ export default function MusicControl() {
     const [musicQueue] = useAtom(musicQueueAtom);
     const youtubePlayerControl = useAtomValue(YoutubePlayerControlAtom);
     const intervalPlayingIDRef = React.useRef<ReturnType<typeof setInterval>>();
+    const isPlaying = musicControlState.matches("playing");
 
     const [youtubePlayerPlayingMediaId, setYoutubePlayerPlayingMediaId] = React.useState("1wq47tabJh0");
 
@@ -55,18 +56,28 @@ export default function MusicControl() {
         }
     }, [musicControlDispatch, musicControlState, musicQueue, youtubePlayerControl])
 
-
     return <div className="flex w-full flex-row">
         <div className="flex w-full justify-center items-center"></div>
         <div className="flex w-2/4 gap-2 justify-center items-center">
             <ArrowLeftCircleIcon />
-            <button
-                onClick={() => {
-                    youtubePlayerControl?.playVideo?.();
-                }}
-            >
-                <PlayCircleIcon fill='white' className='w-8 h-8' />
-            </button>
+            {isPlaying ?
+                <button
+                    onClick={() => {
+                        youtubePlayerControl?.pauseVideo?.();
+                        musicControlDispatch("PAUSE");
+                    }}
+                >
+                    <PauseCircleIcon fill='white' className='w-8 h-8' />
+                </button> :
+                <button
+                    onClick={() => {
+                        youtubePlayerControl?.playVideo?.();
+                        musicControlDispatch("PLAY");
+                    }}
+                >
+                    <PlayCircleIcon fill='white' className='w-8 h-8' />
+                </button>
+            }
             <ArrowRightCircleIcon />
         </div>
         <div className="flex w-full justify-center items-center"></div>
