@@ -7,7 +7,7 @@ import { Combobox } from '@headlessui/react'
 import { searchMedias, MediaItem, getSuggestions } from "./actions";
 import { useAtomValue, useSetAtom } from "jotai";
 import { musicQueueAtom } from "src/modules/music-queue/state";
-import { realmCollectionsAtom } from "../context/realm.context";
+import { realmCollectionsAtom } from "../../context/realm.context";
 
 export default function MusicSearchPage() {
     const setMusicQueue = useSetAtom(musicQueueAtom);
