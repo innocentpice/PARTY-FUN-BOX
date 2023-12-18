@@ -80,7 +80,7 @@ export default function MusicSearchPage() {
         <div className="flex flex-wrap overflow-y-scroll">
             {searchResult.map((video) => <div key={video.id} className="flex flex-col w-1/2 @2xl:w-1/3 @5xl:w-1/4 gap-2 p-5 hover:bg-slate-700/50 rounded-lg group relative">
                 <div className="flex w-full aspect-w-1 aspect-h-1 relative group-hover:blur-[1px]">
-                    <Image src={video.thumbnail?.url as string} fill alt="" className="rounded-xl" />
+                    <Image src={video.thumbnail?.url as string} fill alt="" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="rounded-xl" />
                     {video.source === "YOUTUBE" && <YoutubeIcon className="absolute z-auto top-2 left-2 w-4 h-4 opacity-80" fill="red" color="white" />}
                 </div>
                 <div className="flex flex-col gap-1 text-sm h-10 group-hover:blur-[1px]">

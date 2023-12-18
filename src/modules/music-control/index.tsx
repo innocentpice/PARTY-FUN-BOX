@@ -1,4 +1,5 @@
 'use client';
+
 import React from "react";
 import { YoutubePlayerControlAtom } from "../music-player/youtube-iframe.player.control";
 import { useAtom, useAtomValue } from "jotai";
@@ -11,13 +12,39 @@ export default function MusicControl() {
     const [musicControlState, musicControlDispatch] = useAtom(musicControlMachineAtom);
     const [musicQueue] = useAtom(musicQueueAtom);
     const youtubePlayerControl = useAtomValue(YoutubePlayerControlAtom);
+    const intervalPlayingIDRef = React.useRef<ReturnType<typeof setInterval>>();
 
-    const youtubePlayerPlayingMediaId = youtubePlayerControl?.getVideoUrl?.();
+    const [youtubePlayerPlayingMediaId, setYoutubePlayerPlayingMediaId] = React.useState("1wq47tabJh0");
 
     React.useEffect(() => {
-        const firstQueue = musicQueue[0]
+        clearInterval(intervalPlayingIDRef.current);
 
+        intervalPlayingIDRef.current = setInterval(() => {
+            const currentPlayingMediaId = youtubePlayerControl?.playerInfo?.videoData?.video_id || "";
 
+            if (!currentPlayingMediaId) return;
+
+            setYoutubePlayerPlayingMediaId(prev => {
+                if (prev === currentPlayingMediaId || currentPlayingMediaId === "") return prev;
+                return currentPlayingMediaId;
+            });
+
+            if (!musicControlState.context.playingMedia || musicControlState.context.playingMedia.player !== "YOUTUBE" || !youtubePlayerControl) return;
+
+            if (musicControlState.context.playingMedia.videoId !== youtubePlayerPlayingMediaId) {
+                console.log("Sync Playing", musicControlState.context.playingMedia.videoId, youtubePlayerPlayingMediaId);
+                youtubePlayerControl.loadVideoById?.(musicControlState.context.playingMedia.videoId)
+            }
+
+        }, 1)
+
+        return () => {
+            clearInterval(intervalPlayingIDRef.current)
+        }
+    }, [musicControlState.context.playingMedia, youtubePlayerControl, youtubePlayerPlayingMediaId]);
+
+    React.useEffect(() => {
+        const firstQueue = musicQueue[0];
         if (firstQueue?.id && (musicControlState.context.playingMedia?.player !== "YOUTUBE" || musicControlState.context.playingMedia?.videoId !== firstQueue.id)) {
             musicControlDispatch({
                 type: "LOAD", "meida": {
@@ -26,17 +53,8 @@ export default function MusicControl() {
                 }
             })
         }
-    }, [musicControlDispatch, musicControlState, musicQueue])
+    }, [musicControlDispatch, musicControlState, musicQueue, youtubePlayerControl])
 
-    React.useEffect(() => {
-        // Sync Playing Media Youtube Player
-        if (!musicControlState.context.playingMedia || musicControlState.context.playingMedia.player !== "YOUTUBE" || !youtubePlayerControl) return;
-
-        if (musicControlState.context.playingMedia.videoId != youtubePlayerPlayingMediaId) {
-            youtubePlayerControl.loadVideoById?.(musicControlState.context.playingMedia.videoId)
-        }
-
-    }, [musicControlState.context.playingMedia, youtubePlayerControl, youtubePlayerPlayingMediaId]);
 
     return <div className="flex w-full flex-row">
         <div className="flex w-full justify-center items-center"></div>

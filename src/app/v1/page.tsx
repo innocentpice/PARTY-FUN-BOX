@@ -1,5 +1,3 @@
-'use client'
-
 import React from "react";
 import { YoutubeVideoPlayer } from "src/modules/music-player/youtube.player";
 

@@ -1,48 +1,27 @@
 'use client';
 
 import React from "react";
-import { YoutubePlayerControlAtom } from "./youtube-iframe.player.control"
-import { useSetAtom } from "jotai";
+import { YoutubePlayerControlAtom, YoutubePlayerRefAtom } from "./youtube-iframe.player.control"
+import { useAtomValue, useSetAtom } from "jotai";
+import { loadable } from "jotai/utils";
 
 export default function YoutubePlayerIframe() {
-    const playerElmRef = React.useRef<HTMLDivElement>(null);
-    const setYoutubePlayerControlAtom = useSetAtom(YoutubePlayerControlAtom);
+    const ytPlayerRef = React.useRef<HTMLDivElement>(null);
+    const setYoutubePlayerRef = useSetAtom(YoutubePlayerRefAtom);
+    const youtubePlayerControlAtom = useAtomValue(loadable(YoutubePlayerControlAtom))
 
     React.useEffect(() => {
-
-        const youtubePlayer = new YT.Player(playerElmRef.current as HTMLDivElement, {
-            width: "100%",
-            height: "100%",
-            videoId: "1wq47tabJh0",
-            playerVars: {
-                autoplay: 1,
-                playsinline: 1,
-                modestbranding: 1
-            },
-            events: {
-                onApiChange: (...param) => console.log(`onApiChange`, param),
-                onError: (...param) => console.log(`onError`, param),
-                onPlaybackQualityChange: (...param) => console.log(`onPlaybackQualityChange`, param),
-                onPlaybackRateChange: (...param) => console.log(`onPlaybackRateChange`, param),
-                onReady: (...param) => () => {
-                    console.log(`onReady`, param)
-                },
-                onStateChange: ({ data }) => {
-                    if (data === YT.PlayerState.UNSTARTED) {
-                        setYoutubePlayerControlAtom(youtubePlayer);
-                    }
-                },
-            },
-        });
+        if (ytPlayerRef.current)
+            setYoutubePlayerRef((prev) => prev === ytPlayerRef.current ? prev : ytPlayerRef.current);
 
         return () => {
-            youtubePlayer.destroy?.();
-            setYoutubePlayerControlAtom(undefined);
+            if (youtubePlayerControlAtom.state === "hasData" && youtubePlayerControlAtom.data !== null) {
+                youtubePlayerControlAtom.data?.destroy();
+            }
         }
-
-    }, [setYoutubePlayerControlAtom]);
+    }, [setYoutubePlayerRef, youtubePlayerControlAtom])
 
     return <div className="flex aspect-w-16 aspect-h-9 w-full">
-        <div id="yt-player" className="rounded-2xl" ref={playerElmRef} />
+        <div id="yt-player" className="rounded-2xl" ref={ytPlayerRef} />
     </div>
 }

@@ -51,7 +51,7 @@ export default function MusicQueue() {
         >
           <div className="flex w-full @md:w-1/5 group-hover:blur-sm">
             <div className="flex w-full aspect-w-1 aspect-h-1 relative">
-              <Image src={video.thumbnail?.url as string} fill alt="" className="rounded-md" />
+              <Image src={video.thumbnail?.url as string} fill alt="" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="rounded-md" />
               <YoutubeIcon className="absolute z-auto top-2 left-2 w-4 h-4" fill="red" color="white" />
             </div>
           </div>
