@@ -29,7 +29,7 @@ export const YoutubePlayerControlAtom = atom<
       autoplay: 1,
       playsinline: 1,
       modestbranding: 1,
-      origin: 'http://localhost:4200',
+      origin: '*',
     },
     events: {
       onApiChange: (...param) => console.log(`onApiChange`, param),
