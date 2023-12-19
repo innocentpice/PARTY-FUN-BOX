@@ -1,3 +1,5 @@
+import "@types/spotify-web-playback-sdk";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 declare module '*.svg' {
   const content: any;

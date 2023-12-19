@@ -18,6 +18,41 @@ export default function RootLayout({
         <html lang="en">
             <body className='bg-black @container text-gray-400 relative'>
                 <script src="https://www.youtube.com/iframe_api" defer />
+                <script dangerouslySetInnerHTML={{
+                    __html: `
+                    window.onSpotifyWebPlaybackSDKReady = () => {
+                        const token = "BQAnYVgQY4a4XL4zve5GVm7pmrBbdIJ4HicuPKJHnF5Fepqz2BMz6PCd9ODIKxuJeDKeh2D22-RhRdM8gjYgMPsjV2GYWSdZF0EtsLFzGahyy84EN3k2QMqEwchUPu79-Vu6WxPfr-kcjxBn9oYojPmiOozj4f29mTXcgJqblFzYQnpc-D6huqFWjYSHG0OZGz-uiYusBUjPSWXRiSD_SIzZcVxmfxEP";
+                        const player = new Spotify.Player({
+                            name: 'Web Playback SDK Quick Start Player',
+                            getOAuthToken: cb => { cb(token); },
+                            volume: 0.5
+                        });
+            
+                        // Ready
+                        player.addListener('ready', ({ device_id }) => {
+                            console.log('Ready with Device ID', device_id);
+                        });
+            
+                        // Not Ready
+                        player.addListener('not_ready', ({ device_id }) => {
+                            console.log('Device ID has gone offline', device_id);
+                        });
+            
+                        player.addListener('initialization_error', ({ message }) => {
+                            console.error(message);
+                        });
+            
+                        player.addListener('authentication_error', ({ message }) => {
+                            console.error(message);
+                        });
+            
+                        player.addListener('account_error', ({ message }) => {
+                            console.error(message);
+                        });
+            
+                        player.connect();
+                    }
+                `}} />
                 <script src="https://sdk.scdn.co/spotify-player.js" defer />
                 <Providers>
                     {children}
