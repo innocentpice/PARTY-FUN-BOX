@@ -18,7 +18,7 @@ export default function RootLayout({
         <div className="flex flex-col w-1/3 gap-2">
           {/* MAIN MENU */}
           <div className="flex flex-col gap-3 bg-slate-600/20 h-fit rounded-xl py-3 px-5">
-            <Link href="/v2">
+            <Link href="/v3">
               <div className="flex flex-row w-full hover:text-white py-2 content-center cursor-pointer">
                 <div className="flex w-full @md:w-1/5 justify-center">
                   <VideoIcon />
@@ -28,7 +28,7 @@ export default function RootLayout({
                 </div>
               </div>
             </Link>
-            <Link href="/v2/music-search">
+            <Link href="/v3/music-search">
               <div className="flex flex-row w-full hover:text-white py-2 content-center cursor-pointer">
                 <div className="flex w-full @md:w-1/5 justify-center">
                   <SearchIcon />

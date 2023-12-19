@@ -41,11 +41,5 @@ export function YoutubePlayerIframeControl() {
         <div className="flex justify-center">
             {firstQueue.title}
         </div>
-        <div className="flex flex-row gap-5 justify-center">
-            <button className="flex" > {"<"}-- PREV</button>
-            <button className="flex">PAUSE</button>
-            <button className="flex">PLAY</button>
-            <button className="flex">NEXT --{">"}</button>
-        </div >
     </div>
 }
