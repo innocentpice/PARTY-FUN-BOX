@@ -18,6 +18,7 @@ export default function RootLayout({
         <html lang="en">
             <body className='bg-black @container text-gray-400 relative'>
                 <script src="https://www.youtube.com/iframe_api" defer />
+                <script src="https://sdk.scdn.co/spotify-player.js" defer />
                 <Providers>
                     {children}
                 </Providers>
