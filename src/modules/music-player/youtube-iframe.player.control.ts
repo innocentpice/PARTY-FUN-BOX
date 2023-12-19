@@ -18,7 +18,7 @@ export const YoutubePlayerControlAtom = atom<
         resolve(get(YoutubePlayerRefAtom) as HTMLDivElement);
         clearInterval(checkElmInterval);
       }
-    }, 1000);
+    }, 1);
   });
 
   const youtubePlayer = new YT.Player(YoutubePlayerElm, {
@@ -38,16 +38,8 @@ export const YoutubePlayerControlAtom = atom<
         console.log(`onPlaybackQualityChange`, param),
       onPlaybackRateChange: (...param) =>
         console.log(`onPlaybackRateChange`, param),
-      onReady:
-        (...param) =>
-        () => {
-          console.log(`onReady`, param);
-        },
-      onStateChange:
-        (...param) =>
-        () => {
-          console.log(`onStateChange`, param);
-        },
+      onReady: (...param) => console.log(`onReady`, param),
+      onStateChange: (...param) => console.log(`onStateChange`, param),
     },
   });
 
