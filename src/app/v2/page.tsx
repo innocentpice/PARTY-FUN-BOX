@@ -1,8 +1,10 @@
 'use client';
 
 import React from "react";
-import MusicControl from "src/modules/music-control";
-import YoutubePlayerIframe from "src/modules/music-player/youtube-iframe.player";
+import MusicControl from "src/modules/legacys/music-control";
+import YoutubePlayerIframe from "src/modules/legacys/music-player/youtube-iframe.player";
+
+
 
 export default function IndexPage() {
     return <div className="flex flex-col">

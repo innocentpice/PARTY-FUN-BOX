@@ -4,7 +4,8 @@ import React from 'react';
 import { SearchIcon, VideoIcon } from "lucide-react"
 import '../global.css';
 import Link from 'next/link';
-import MusicQueue from '../../modules/music-queue';
+import MusicQueue from 'src/modules/legacys/music-queue';
+
 
 export default function RootLayout({
   children,
