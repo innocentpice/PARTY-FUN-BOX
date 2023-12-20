@@ -1,7 +1,6 @@
 'use server';
 
 import { Scopes, SpotifyApi } from '@spotify/web-api-ts-sdk';
-
 import YoutubeSearch, { Video } from 'youtube-sr';
 
 export type MediaItem =
@@ -13,6 +12,11 @@ export type MediaItem =
     } & Spotify.Track);
 
 export async function searchMedias(searchTerms: string) {
+  fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
+    cache: 'no-store',
+  });
+
   const spotifyApi = SpotifyApi.withClientCredentials(
     '2198e2ab4de94511851246906f27cf05',
     'e9e531494e2d48708c84bd02fdd67037',
