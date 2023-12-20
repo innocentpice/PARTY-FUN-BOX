@@ -7,14 +7,15 @@ import { useAtom } from "jotai";
 
 export function YoutubePlayerIframeControl() {
 
+
     const { YoutubeIframePlayerRef } = React.useContext(YoutubePlayerIframeContext);
     const intervalRef = React.useRef<NodeJS.Timeout>();
     const [musicQueue] = useAtom(musicQueueAtom);
 
     const firstQueue = React.useMemo(() => ({
-        id: musicQueue[0]?.id,
+        id: musicQueue[0]?.id || "",
         source: musicQueue[0]?.source,
-        title: musicQueue[0]?.title
+        title: musicQueue[0].source === "YOUTUBE" ? musicQueue[0]?.title : ""
     }), [musicQueue]);
 
 

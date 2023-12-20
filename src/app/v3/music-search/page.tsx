@@ -78,34 +78,75 @@ export default function MusicSearchPage() {
         </Combobox>
 
         <div className="flex flex-wrap overflow-y-scroll">
-            {searchResult.map((video) => <div key={video.id} className="flex flex-col w-1/2 @2xl:w-1/3 @5xl:w-1/4 gap-2 p-5 hover:bg-slate-700/50 rounded-lg group relative">
-                <div className="flex w-full aspect-w-1 aspect-h-1 relative group-hover:blur-[1px]">
-                    <Image src={video.thumbnail?.url as string} fill alt="" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="rounded-xl" />
-                    {video.source === "YOUTUBE" && <YoutubeIcon className="absolute z-auto top-2 left-2 w-4 h-4 opacity-80" fill="red" color="white" />}
-                </div>
-                <div className="flex flex-col gap-1 text-sm h-10 group-hover:blur-[1px]">
-                    <p className="line-clamp-2">
-                        {video.title}
-                    </p>
-                </div>
-                <div className="hidden group-hover:flex absolute text-xs items-center w-full h-full top-0 left-0">
-                    <button
-                        className="flex flex-col m-auto text-white font-semibold hover:underline hover:opacity-90 cursor-pointer items-center gap-2"
-                        onClick={() => {
-                            isOfflineMode ?
-                                setMusicQueue(prev => [...prev, video])
-                                : realmCollections?.playlist?.updateOne({ source: video.source, id: video.id }, { $set: video }, { upsert: true })
-                        }}
-                    >
-                        <div className="flex w-10 h-10">
-                            <PlusCircleIcon width="100%" height="100%" />
+            {searchResult.map((track) =>
+                track.source === "YOUTUBE" ?
+                    <div key={track.id} className="flex flex-col w-1/2 @2xl:w-1/3 @5xl:w-1/4 gap-2 p-5 hover:bg-slate-700/50 rounded-lg group relative">
+                        <div className="flex w-full aspect-w-1 aspect-h-1 relative group-hover:blur-[1px]">
+                            <Image src={track.thumbnail?.url as string} fill alt="" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="rounded-xl" />
+                            <YoutubeIcon className="absolute z-auto top-2 left-2 w-4 h-4 opacity-80" fill="red" color="white" />
                         </div>
-                        <div className="flex">
-                            ADD TO QUEUE
+                        <div className="flex flex-col gap-1 text-sm h-10 group-hover:blur-[1px]">
+                            <p className="line-clamp-2">
+                                {track.title}
+                            </p>
                         </div>
-                    </button>
-                </div>
-            </div>)}
+                        <div className="hidden group-hover:flex absolute text-xs items-center w-full h-full top-0 left-0">
+                            <button
+                                className="flex flex-col m-auto text-white font-semibold hover:underline hover:opacity-90 cursor-pointer items-center gap-2"
+                                onClick={() => {
+                                    isOfflineMode ?
+                                        setMusicQueue(prev => [...prev, track])
+                                        : realmCollections?.playlist?.updateOne({ source: track.source, id: track.id }, { $set: track }, { upsert: true })
+                                }}
+                            >
+                                <div className="flex w-10 h-10">
+                                    <PlusCircleIcon width="100%" height="100%" />
+                                </div>
+                                <div className="flex">
+                                    ADD TO QUEUE
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    :
+                    <div key={track.id} className="flex flex-col w-1/2 @2xl:w-1/3 @5xl:w-1/4 gap-2 p-5 hover:bg-slate-700/50 rounded-lg group relative">
+                        <div className="flex w-full aspect-w-1 aspect-h-1 relative group-hover:blur-[1px]">
+                            <Image src={track.album.images[0].url as string} fill alt="" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="rounded-xl" />
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48" className="absolute z-auto top-2 left-2 w-4 h-4 opacity-80">
+                                <path fill="#8bc34a"
+                                    d="M24.001,4c-11.077,0-20,8.923-20,20s8.923,20,20,20c11.076,0,20-8.923,20-20S35.077,4,24.001,4z"></path>
+                                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-miterlimit="10" stroke-width="3.7" d="M12.628,18.819c0,0,12.319-3.511,23.489,2.362"></path>
+                                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-miterlimit="10" stroke-width="3.3" d="M13.745,24.947c0,0,10.372-3.16,19.915,2.298"></path>
+                                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-miterlimit="10" stroke-width="2.5" d="M14.319,30.755c0,0,9.351-2.904,17.562,1.976"></path>
+                            </svg>
+                        </div>
+                        <div className="flex flex-col gap-1 text-sm h-10 group-hover:blur-[1px]">
+                            <p className="line-clamp-2">
+                                {`${track.name} - ${track.artists[0].name}`}
+                            </p>
+                        </div>
+                        <div className="hidden group-hover:flex absolute text-xs items-center w-full h-full top-0 left-0">
+                            <button
+                                className="flex flex-col m-auto text-white font-semibold hover:underline hover:opacity-90 cursor-pointer items-center gap-2"
+                                onClick={() => {
+                                    isOfflineMode ?
+                                        setMusicQueue(prev => [...prev, track])
+                                        : realmCollections?.playlist?.updateOne({ source: track.source, id: track.id }, { $set: track }, { upsert: true })
+                                }}
+                            >
+                                <div className="flex w-10 h-10">
+                                    <PlusCircleIcon width="100%" height="100%" />
+                                </div>
+                                <div className="flex">
+                                    ADD TO QUEUE
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+            )}
         </div>
 
     </div >

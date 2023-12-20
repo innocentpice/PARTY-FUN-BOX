@@ -44,27 +44,40 @@ export default function MusicQueue() {
     </div>
     <hr />
     <div className="flex flex-col w-full">
-      {musicQueue.map((video, idx) => (
+      {musicQueue.map((track, idx) => (
         <div
-          key={`${idx}_${video.id}`}
+          key={`${idx}_${track.id}`}
           className="flex gap-2 hover:bg-slate-700/10 rounded-md p-2 cursor-pointer group relative w-full"
         >
           <div className="flex w-full @md:w-1/5 group-hover:blur-sm">
             <div className="flex w-full aspect-w-1 aspect-h-1 relative">
-              <Image src={video.thumbnail?.url as string} fill alt="" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="rounded-md" />
-              <YoutubeIcon className="absolute z-auto top-2 left-2 w-4 h-4" fill="red" color="white" />
+              <Image src={(track.source === "YOUTUBE" ? track.thumbnail?.url : track.album.images[0].url) as string} fill alt="" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="rounded-md" />
+              {track.source === "YOUTUBE" ?
+                <YoutubeIcon className="absolute z-auto top-2 left-2 w-4 h-4" fill="red" color="white" />
+                :
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48" className="absolute z-auto top-2 left-2 w-4 h-4 opacity-80">
+                  <path fill="#8bc34a"
+                    d="M24.001,4c-11.077,0-20,8.923-20,20s8.923,20,20,20c11.076,0,20-8.923,20-20S35.077,4,24.001,4z"></path>
+                  <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-miterlimit="10" stroke-width="3.7" d="M12.628,18.819c0,0,12.319-3.511,23.489,2.362"></path>
+                  <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-miterlimit="10" stroke-width="3.3" d="M13.745,24.947c0,0,10.372-3.16,19.915,2.298"></path>
+                  <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-miterlimit="10" stroke-width="2.5" d="M14.319,30.755c0,0,9.351-2.904,17.562,1.976"></path>
+                </svg>
+              }
             </div>
           </div>
           <div className="hidden @md:flex w-full h-[theme(spacing.6)] self-center group-hover:blur-sm">
             <p className='line-clamp-1'>
-              {video.title}
+              {track.source === "YOUTUBE" ? track.title : `${track.name} - ${track.artists[0].name}`}
             </p>
           </div>
           <div className="hidden group-hover:flex flex-col @md:flex-row absolute top-0 left-0 w-full h-full text-white font-semibold justify-center gap-2">
             <button
               className="flex items-center justify-center hover:underline hover:opacity-90 cursor-pointer"
               onClick={() => {
-                setForcePlay(video.id)
+                setForcePlay(track.id)
               }}
             >
               PLAY
@@ -73,13 +86,13 @@ export default function MusicQueue() {
               className="flex items-center justify-center hover:underline hover:opacity-90 cursor-pointer"
               onClick={() => {
                 setMusicQueue((prev) => {
-                  const result = prev.filter(({ id }) => id != video.id);
+                  const result = prev.filter(({ id }) => id != track.id);
                   return result;
                 })
 
                 realmCollections.playlist?.deleteOne({
-                  source: video.source,
-                  id: video.id
+                  source: track.source,
+                  id: track.id
                 })
               }}
             >
