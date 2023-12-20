@@ -33,7 +33,7 @@ export default function MusicQueue() {
   }, [realmCollections.playlist, setMusicQueue]);
 
 
-  return <div className="flex flex-col gap-3 bg-slate-600/20 h-full rounded-xl p-3 pb-20">
+  return <div className="flex flex-col gap-3 bg-slate-600/20 h-full rounded-xl p-3 pb-10">
     <div className="flex p-2">
       <div className="flex w-full @md:w-1/5 justify-center">
         <ListMusicIcon />
@@ -43,7 +43,7 @@ export default function MusicQueue() {
       </div>
     </div>
     <hr />
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full overflow-y-scroll h-full">
       {musicQueue.map((track, idx) => (
         <div
           key={`${idx}_${track.id}`}
