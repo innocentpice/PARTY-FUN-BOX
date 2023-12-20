@@ -27,7 +27,7 @@ export default function MusicPlayer() {
     const audioDuration = trackInfo?.audio.approxDurationMs ? Number.parseFloat(trackInfo?.audio.approxDurationMs) / 1000 + 2 : null;
 
     React.useEffect(() => {
-        if (!("MediaMetadata" in window) || !('mediaSession' in navigator)) return;
+        if (!("MediaMetadata" in window) || !('mediaSession' in navigator) || playingTrack?.source !== "YOUTUBE") return;
 
         navigator.mediaSession.metadata = new MediaMetadata({
             title: playingTrack?.title || "",
@@ -37,10 +37,10 @@ export default function MusicPlayer() {
                 src: playingTrack?.thumbnail?.url || "",
             }]
         });
-    }, [playingTrack?.channel?.name, playingTrack?.thumbnail?.url, playingTrack?.title]);
+    }, [playingTrack]);
 
     React.useEffect(() => {
-        if (playingTrack) {
+        if (playingTrack && playingTrack.source === "YOUTUBE") {
             if (document.getElementsByTagName("title")?.[0])
                 document.getElementsByTagName("title")[0].innerHTML = `PARTY FUN BOX - ${playingTrack.title}`;
             getYoutubeStream(`https://www.youtube.com/watch?v=${playingTrack.id}`).then(JSON.parse).then(track => setTrackInfo({ ...track, id: playingTrack.id })).catch(console.log);

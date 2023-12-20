@@ -2,14 +2,14 @@
 
 import React from 'react';
 import { ListMusicIcon, YoutubeIcon } from "lucide-react";
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { forcePlayAtom, musicQueueAtom } from './state';
+import { useAtom, useAtomValue } from 'jotai';
+import { musicQueueAtom } from './state';
 import Image from 'next/image';
 import { useWatch } from 'src/hooks/useWatchRealmCollection';
 import { realmCollectionsAtom } from 'src/app/context/realm.context';
 
 export default function MusicQueue() {
-  const setForcePlay = useSetAtom(forcePlayAtom);
+  // const setForcePlay = useSetAtom(forcePlayAtom);
   const [musicQueue, setMusicQueue] = useAtom(musicQueueAtom);
 
   const realmCollections = useAtomValue(realmCollectionsAtom);
@@ -74,14 +74,14 @@ export default function MusicQueue() {
             </p>
           </div>
           <div className="hidden group-hover:flex flex-col @md:flex-row absolute top-0 left-0 w-full h-full text-white font-semibold justify-center gap-2">
-            <button
+            {/* <button
               className="flex items-center justify-center hover:underline hover:opacity-90 cursor-pointer"
               onClick={() => {
                 setForcePlay(track.id)
               }}
             >
               PLAY
-            </button>
+            </button> */}
             <button
               className="flex items-center justify-center hover:underline hover:opacity-90 cursor-pointer"
               onClick={() => {

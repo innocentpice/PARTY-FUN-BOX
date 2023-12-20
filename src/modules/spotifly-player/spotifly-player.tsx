@@ -10,11 +10,9 @@ import { musicQueueAtom } from "../legacys/music-queue/state";
 import { MediaItem } from "src/app/v3/music-search/actions";
 import { realmCollectionsAtom } from "src/app/context/realm.context";
 
-
-export const spotifyApi = SpotifyApi.withImplicitGrant("2198e2ab4de94511851246906f27cf05", "http://localhost:4200/v3", Scopes.all);
+export const spotifyApi = SpotifyApi.withImplicitGrant("2198e2ab4de94511851246906f27cf05", "http://localhost:4200/v3/player", Scopes.all);
 
 export function SpotifyPlayer() {
-
     const [musicQueue, setMusicQueue] = useAtom(musicQueueAtom);
     const [spotifyPlayer, SetSpotifyPlayerAtom] = useAtom(SpotifyPlayerAtom);
     const realmCollections = useAtomValue(realmCollectionsAtom);
