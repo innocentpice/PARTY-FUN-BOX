@@ -39,7 +39,7 @@ export default function RootLayout({
               </div>
             </Link>
           </div>
-          <MusicQueue />
+          {/* <MusicQueue /> */}
         </div>
         <div className="flex w-full rounded-xl">
           <div className="flex flex-col gap-3 bg-slate-600/20 h-full w-full rounded-xl py-3 px-5">
