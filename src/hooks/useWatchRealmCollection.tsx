@@ -41,32 +41,38 @@ export function useWatch(collection: Realm.Services.MongoDB.MongoDBCollection<Pl
 
         let stream: ReturnType<typeof collection.watch> | null = null;
         const watchTodos = async () => {
-            stream = collection.watch({ filter });
-            for await (const change of stream) {
-                switch (change.operationType) {
-                    case "insert": {
-                        handlersRef.current.onInsert(change);
-                        break;
-                    }
-                    case "update": {
-                        handlersRef.current.onUpdate(change);
-                        break;
-                    }
-                    case "replace": {
-                        handlersRef.current.onReplace(change);
-                        break;
-                    }
-                    case "delete": {
-                        handlersRef.current.onDelete(change);
-                        break;
-                    }
-                    default: {
-                        // change.operationType will always be one of the specified cases, so we should never hit this default
-                        throw new Error(
-                            `Invalid change operation type: ${change.operationType}`
-                        );
+            try {
+
+                stream = collection.watch({ filter });
+                for await (const change of stream) {
+                    switch (change.operationType) {
+                        case "insert": {
+                            handlersRef.current.onInsert(change);
+                            break;
+                        }
+                        case "update": {
+                            handlersRef.current.onUpdate(change);
+                            break;
+                        }
+                        case "replace": {
+                            handlersRef.current.onReplace(change);
+                            break;
+                        }
+                        case "delete": {
+                            handlersRef.current.onDelete(change);
+                            break;
+                        }
+                        default: {
+                            // change.operationType will always be one of the specified cases, so we should never hit this default
+                            throw new Error(
+                                `Invalid change operation type: ${change.operationType}`
+                            );
+                        }
                     }
                 }
+            } catch (err) {
+                console.log(err);
+                watchTodos();
             }
         };
         watchTodos();

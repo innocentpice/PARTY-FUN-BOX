@@ -13,6 +13,7 @@
     "@distube/ytdl-core": "^4.13.3",
     "@headlessui/react": "^1.7.17",
     "@nx/next": "17.1.2",
+    "@spotify/web-api-ts-sdk": "^1.1.2",
     "butterchurn": "^2.6.7",
     "butterchurn-presets": "^2.4.7",
     "clsx": "^2.0.0",
