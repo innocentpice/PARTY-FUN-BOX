@@ -3,11 +3,12 @@
 import React from "react";
 
 import { Scopes, SpotifyApi } from "@spotify/web-api-ts-sdk"
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { SpotifyPlayerAtom } from "./spotifly-player.context";
 import { PauseCircleIcon, PlayCircleIcon } from "lucide-react";
 import { musicQueueAtom } from "../legacys/music-queue/state";
 import { MediaItem } from "src/app/v3/music-search/actions";
+import { realmCollectionsAtom } from "src/app/context/realm.context";
 
 
 export const spotifyApi = SpotifyApi.withImplicitGrant("2198e2ab4de94511851246906f27cf05", "http://localhost:4200/v3", Scopes.all);
@@ -16,6 +17,7 @@ export function SpotifyPlayer() {
 
     const [musicQueue, setMusicQueue] = useAtom(musicQueueAtom);
     const [spotifyPlayer, SetSpotifyPlayerAtom] = useAtom(SpotifyPlayerAtom);
+    const realmCollections = useAtomValue(realmCollectionsAtom);
 
     const track = musicQueue[0]?.source === "SPOTIFLY" ? musicQueue[0] : null;
 
@@ -61,13 +63,29 @@ export function SpotifyPlayer() {
             });
 
             player.on('player_state_changed', state => {
-                SetSpotifyPlayerAtom(prev => prev === null ? prev : ({ ...prev, playerState: state }))
+                SetSpotifyPlayerAtom(prev => {
+
+                    if (
+                        prev?.playerState
+                        && state.track_window.previous_tracks.find(x => x.id === state.track_window.current_track.id)
+                        && !prev.playerState.paused
+                        && state.paused
+                    ) {
+                        realmCollections.playlist?.deleteOne({
+                            source: "SPOTIFLY",
+                            id: state.track_window.current_track.id
+                        })
+                    }
+
+                    return prev === null ? prev : ({ ...prev, playerState: state });
+                });
+                console.log("player_state_changed", state);
             })
 
             player.connect();
 
         };
-    }, [SetSpotifyPlayerAtom]);
+    }, [SetSpotifyPlayerAtom, realmCollections.playlist]);
 
 
     React.useEffect(() => {
@@ -75,20 +93,22 @@ export function SpotifyPlayer() {
         if (!track) {
             spotifyApi.recommendations.get({
                 seed_tracks: ['57NV6TzzYS473R7OgmDepf'],
+                limit: 2
             }).then(res => {
                 const tracks = res.tracks.map(track => ({
                     ...track,
                     source: 'SPOTIFLY'
                 })) as unknown as MediaItem[]
-
-                setMusicQueue(prev => [...prev, ...tracks])
+                tracks.map(track => {
+                    realmCollections?.playlist?.updateOne({ source: track.source, id: track.id }, { $set: track }, { upsert: true })
+                });
             })
             return;
         };
 
         if (spotifyPlayer.playerState?.track_window?.current_track?.uri !== track.uri)
             spotifyApi.player.startResumePlayback(spotifyPlayer.device_id, undefined, [track.uri]);
-    }, [setMusicQueue, spotifyPlayer, track]);
+    }, [realmCollections?.playlist, setMusicQueue, spotifyPlayer, track]);
 
     if (!spotifyPlayer) return;
 
