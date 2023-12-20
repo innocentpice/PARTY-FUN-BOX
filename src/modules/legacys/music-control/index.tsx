@@ -58,7 +58,7 @@ export default function MusicControl() {
 
     return <div className="flex w-full flex-row">
         <div className="flex w-full justify-center items-center">
-            {musicQueue[0].source === "YOUTUBE" && musicQueue[0]?.title || null}
+            {musicQueue[0]?.source === "YOUTUBE" && musicQueue[0]?.title || null}
         </div>
         <div className="flex w-2/4 gap-2 justify-center items-center">
             <ArrowLeftCircleIcon />
