@@ -7,14 +7,17 @@ import { useAtom } from "jotai";
 import { SpotifyPlayerAtom } from "./spotifly-player.context";
 import { PauseCircleIcon, PlayCircleIcon } from "lucide-react";
 import { musicQueueAtom } from "../legacys/music-queue/state";
+import { MediaItem } from "src/app/v3/music-search/actions";
 
 
-const spotifyApi = SpotifyApi.withImplicitGrant("2198e2ab4de94511851246906f27cf05", "http://localhost:4200/v3", Scopes.all);
+export const spotifyApi = SpotifyApi.withImplicitGrant("2198e2ab4de94511851246906f27cf05", "http://localhost:4200/v3", Scopes.all);
 
 export function SpotifyPlayer() {
 
-    const [musicQueue] = useAtom(musicQueueAtom);
+    const [musicQueue, setMusicQueue] = useAtom(musicQueueAtom);
     const [spotifyPlayer, SetSpotifyPlayerAtom] = useAtom(SpotifyPlayerAtom);
+
+    const track = musicQueue[0]?.source === "SPOTIFLY" ? musicQueue[0] : null;
 
     React.useEffect(() => {
         if (document.getElementById("spotify-player-script")) return;
@@ -58,7 +61,7 @@ export function SpotifyPlayer() {
             });
 
             player.on('player_state_changed', state => {
-                SetSpotifyPlayerAtom(prev => !prev ? prev : ({ ...prev, playerState: state }))
+                SetSpotifyPlayerAtom(prev => prev === null ? prev : ({ ...prev, playerState: state }))
             })
 
             player.connect();
@@ -69,11 +72,23 @@ export function SpotifyPlayer() {
 
     React.useEffect(() => {
         if (!spotifyPlayer) return;
-        if (!musicQueue[0]?.source || musicQueue[0].source !== "SPOTIFLY") return;
+        if (!track) {
+            spotifyApi.recommendations.get({
+                seed_tracks: ['57NV6TzzYS473R7OgmDepf'],
+            }).then(res => {
+                const tracks = res.tracks.map(track => ({
+                    ...track,
+                    source: 'SPOTIFLY'
+                })) as unknown as MediaItem[]
 
-        const track = musicQueue[0];
-        spotifyApi.player.startResumePlayback(spotifyPlayer.device_id, undefined, [track.uri]);
-    }, [musicQueue, spotifyPlayer]);
+                setMusicQueue(prev => [...prev, ...tracks])
+            })
+            return;
+        };
+
+        if (spotifyPlayer.playerState?.track_window?.current_track?.uri !== track.uri)
+            spotifyApi.player.startResumePlayback(spotifyPlayer.device_id, undefined, [track.uri]);
+    }, [setMusicQueue, spotifyPlayer, track]);
 
     if (!spotifyPlayer) return;
 
@@ -82,21 +97,20 @@ export function SpotifyPlayer() {
             {`${spotifyPlayer.playerState?.track_window.current_track.name} - ${spotifyPlayer.playerState?.track_window.current_track.artists[0].name}`}
         </p>
         <div className="w-full text-center">
-            {spotifyPlayer.playerState && spotifyPlayer.playerState.paused ?
-                <button
-                    onClick={() => {
-                        spotifyApi.player.pausePlayback(spotifyPlayer.device_id);
-                    }}
-                >
-                    <PauseCircleIcon fill='white' className='w-8 h-8' />
-                </button>
-                :
+            {spotifyPlayer.playerState?.paused ?
                 <button
                     onClick={() => {
                         spotifyApi.player.startResumePlayback(spotifyPlayer.device_id);
                     }}
                 >
                     <PlayCircleIcon fill='white' className='w-8 h-8' />
+                </button> :
+                <button
+                    onClick={() => {
+                        spotifyApi.player.pausePlayback(spotifyPlayer.device_id);
+                    }}
+                >
+                    <PauseCircleIcon fill='white' className='w-8 h-8' />
                 </button>
             }
         </div>
