@@ -12,7 +12,6 @@
     "dev": {
       "name": "dev",
       "command": "yarn dev",
-      "runAtStart": true,
       "preview": {
         "port": 4200
       }
@@ -27,7 +26,11 @@
     },
     "start": {
       "name": "start",
-      "command": "yarn start"
+      "command": "yarn build && yarn start --port 4200",
+      "runAtStart": true,
+      "preview": {
+        "port": 4200
+      }
     }
   }
 }
