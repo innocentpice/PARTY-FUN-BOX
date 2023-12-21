@@ -20,7 +20,7 @@ export default function RootLayout({
         </div>
         <div className="flex w-full rounded-xl">
           <div className="flex flex-col gap-3 bg-slate-600/20 h-full w-full rounded-xl py-3 px-5">
-            <div className="flex flex-col gap-3  h-full w-full  py-3 px-5">
+            <div className="flex flex-col gap-3  h-full w-full  py-3 px-3 @2xl:px-5 @5xl:px-5">
               {children}
             </div>
           </div>

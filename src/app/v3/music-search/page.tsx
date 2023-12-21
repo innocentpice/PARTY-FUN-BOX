@@ -80,7 +80,7 @@ export default function MusicSearchPage() {
         <div className="flex flex-wrap overflow-y-scroll">
             {searchResult.map((track) =>
                 track.source === "YOUTUBE" ?
-                    <div key={track.id} className="flex flex-col w-1/2 @2xl:w-1/3 @5xl:w-1/4 gap-2 p-5 hover:bg-slate-700/50 rounded-lg group relative">
+                    <div key={track.id} className="flex flex-col w-full @2xl:w-1/3 @5xl:w-1/4 gap-2 p-5 hover:bg-slate-700/50 rounded-lg group relative">
                         <div className="flex w-full aspect-w-1 aspect-h-1 relative group-hover:blur-[1px]">
                             <Image src={track.thumbnail?.url as string} fill alt="" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="rounded-xl" />
                             <YoutubeIcon className="absolute z-auto top-2 left-2 w-4 h-4 opacity-80" fill="red" color="white" />
@@ -109,7 +109,7 @@ export default function MusicSearchPage() {
                         </div>
                     </div>
                     :
-                    <div key={track.id} className="flex flex-col w-1/2 @2xl:w-1/3 @5xl:w-1/4 gap-2 p-5 hover:bg-slate-700/50 rounded-lg group relative">
+                    <div key={track.id} className="flex flex-col w-full @2xl:w-1/3 @5xl:w-1/4 gap-2 p-5 hover:bg-slate-700/50 rounded-lg group relative">
                         <div className="flex w-full aspect-w-1 aspect-h-1 relative group-hover:blur-[1px]">
                             <Image src={track.album.images[0].url as string} fill alt="" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="rounded-xl" />
                             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48" className="absolute z-auto top-2 left-2 w-4 h-4 opacity-80">

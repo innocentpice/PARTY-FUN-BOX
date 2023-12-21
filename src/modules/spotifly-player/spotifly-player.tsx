@@ -40,7 +40,7 @@ export function SpotifyPlayer() {
             const player = new window.Spotify.Player({
                 name: 'CX-PARTY-FUNBOX',
                 getOAuthToken: cb => { cb(access_token); },
-                volume: 1,
+                volume: 0.8,
                 enableMediaSession: false
             });
 
